@@ -1,0 +1,46 @@
+App\Entity\ChannelManager:
+    availpro:
+        name:           'Test CM Availpro'
+        identifier:     'dedge'
+        user:           '@cmuser1'
+    yieldplanet:
+        name:           'Test CM Yieldplanet'
+        identifier:     'yieldplanet'
+    reservithotel:
+        name:           'Test CM Reservit'
+        identifier:     'reservit'
+        user:           '@cmuser2'
+    siteminder:
+        name:           'Test CM Siteminder'
+        identifier:     'siteminder'
+        user:           '@cmuser3'
+    ratetiger:
+        name:           'Test CM RateTiger'
+        identifier:     'ratetiger'
+    bookingexpert:
+        name:           'Test CM Booking Expert'
+        identifier:     'bookingexpert'
+        user:           '@cmuser5'
+    elloha:
+        name:           'Test CM Elloha'
+        identifier:     'elloha'
+        user:           '@cmuser6'
+    ericsoft:
+        name:           'Test CM Ericsoft'
+        identifier:     'ericsoft'
+        user:           '@cmuser7'
+    wubook:
+        name:           'Test CM Wubook'
+        identifier:     'wubook'
+    travelclick:
+        name:           'Test CM Travelclick'
+        identifier:     'travelclick'
+        user:         '@cmuser10'
+    smarthotel:
+        name:         'Test CM Smarthotel'
+        identifier:   'smarthotel'
+        user:         '@cmuser11'
+    smartboxbb8:
+        name:         'Test CM Smartbox BB8'
+        identifier:   'smartboxbb8'
+        user:         '@cmuser12'

@@ -1,0 +1,21 @@
+App\Entity\Experience:
+  experience1:
+    partner: '@partner1'
+    identifier: '00022222'
+    name: 'Experience 1'
+    description: 'Test for experience 1'
+    price: 1234.12
+    commission: 12
+    commissionType: 'percentage'
+    createdAt: <(new \DateTime())>
+    updatedAt: <(new \DateTime())>
+  experience2:
+    partner: '@partner2'
+    identifier: '00022223'
+    name: 'Experience 2'
+    description: 'Test for experience 1'
+    price: 2230.12
+    commission: 10
+    commissionType: 'percentage'
+    createdAt: <(new \DateTime())>
+    updatedAt: <(new \DateTime())>

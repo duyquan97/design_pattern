@@ -1,0 +1,30 @@
+sonata_admin:
+    title: CMHUB
+    title_logo: '/images/smartboxlogo.jpeg'
+    search: false
+    persist_filters: true
+    security:
+        handler: sonata.admin.security.handler.role
+        role_admin: ROLE_ADMIN
+        role_super_admin: ROLE_SUPER_ADMIN
+        # permissions not related to an object instance and also to be available when objects do not exist
+        # the DELETE admin permission means the user is allowed to batch delete objects
+        admin_permissions: [CREATE, LIST, DELETE, MASTER]
+
+        # permission related to the objects
+        object_permissions: [VIEW, EDIT, DELETE, MASTER, OWNER]
+
+sonata_block:
+    default_contexts: [cms]
+    blocks:
+        sonata.admin.block.admin_list:
+            contexts:   [admin]
+
+sonata_user:
+    security_acl: false
+    manager_type: orm
+    class:
+        user: App\Application\Sonata\UserBundle\Entity\User
+        group: App\Application\Sonata\UserBundle\Entity\Group
+    mailer: fos_user.mailer.noop
+

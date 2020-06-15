@@ -1,0 +1,5 @@
+#!/bin/sh
+mkdir -p /app/var/log/worker-1
+chown www-data.www-data /app/var/log/worker-1 -R
+exec chpst -uwww-data svlogd -ttt /app/var/log/worker-1
+

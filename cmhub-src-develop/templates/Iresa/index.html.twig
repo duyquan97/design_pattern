@@ -1,0 +1,59 @@
+{% extends '@SonataAdmin/standard_layout.html.twig' %}
+{% form_theme form 'SonataAdminBundle:Form:form_admin_fields.html.twig' %}
+{% block sonata_page_content_header %}
+
+
+    <div class="row">
+        {% if error %}
+            <div class="col-md-12">
+                <div class="alert alert-error">
+                    {{ error }}
+                </div>
+            </div>
+        {% endif %}
+        <div class="col-md-12">
+            {{ form_start(form) }}
+            {{ form_row(form.partner_id) }}
+            {{ form_row(form.startDate) }}
+            {{ form_row(form.endDate) }}
+            <div class="sonata-ba-field">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock sonata_page_content_header %}
+
+{% block sonata_admin_content %}
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-bordered table-striped table-hover sonata-ba-list">
+                <tr>
+                    <th>
+                        Product
+                    </th>
+                    <th>
+                        Date
+                    </th>
+                    <th>
+                        Stock
+                    </th>
+                </tr>
+                {% for availabilitie in availabilities %}
+                    <tr>
+                        <td>
+                            {{ availabilitie.product.name }}
+                        </td>
+                        <td>
+                            {{ availabilitie.date|date("Y-m-d") }}
+                        </td>
+                        <td>
+                            {{ availabilitie.stock }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock %}
+

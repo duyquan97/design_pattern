@@ -1,0 +1,199 @@
+App\Entity\Product:
+    # yieldplanet
+    product1:
+        name:       'Standard room 235854'
+        description: 'Test room 235854'
+        identifier: 235854
+        sellable:   true
+        reservable: true
+        partner:    '@partner1'
+    product2:
+        name:           'Suite room 393333'
+        description:    'Test room 393333'
+        identifier:     393333
+        sellable:       true
+        reservable:     true
+        partner:        '@partner1'
+    # availpro
+    product3:
+        name:           'Standard room 409904'
+        description:    'Standard room 409904'
+        identifier:     409904
+        sellable:       true
+        reservable:     true
+        partner:        '@partner2'
+    product4:
+        name:           'Suite room 396872'
+        description:    'Suite room 396872'
+        identifier:     396872
+        sellable:       true
+        reservable:     true
+        partner:        '@partner2'
+    # reservithotel
+    product5:
+        name:           'Standard room 457386'
+        description:    'Standard room 457386'
+        identifier:     457386
+        sellable:       true
+        reservable:     true
+        partner:        '@partner3'
+    product6:
+        name:           'Suite room 398633'
+        description:    'Suite room 398633'
+        identifier:     398633
+        sellable:       true
+        reservable:     true
+        partner:        '@partner3'
+    # Siteminder
+    product7:
+        name:           'Standard room 504963'
+        description:    'Standard room 504963'
+        identifier:     504963
+        sellable:       true
+        reservable:     true
+        partner:        '@partner4'
+    product8:
+        name:           'Suite room 286201'
+        description:    'Suite room 286201'
+        identifier:     286201
+        sellable:       true
+        reservable:     true
+        partner:        '@partner4'
+
+    # Ratetiger
+    product9:
+        name:           'Standard room 251637'
+        description:    'Standard room 251637'
+        identifier:     251637
+        sellable:       true
+        reservable:     true
+        partner:        '@partner5'
+    product10:
+        name:           'Suite room 406310'
+        description:    'Suite room 406310'
+        identifier:     406310
+        sellable:       true
+        reservable:     true
+        partner:        '@partner5'
+    # Booking Expert
+    product11:
+        name:           'Standard room 517171'
+        description:    'Standard room 517171'
+        identifier:     517171
+        sellable:       true
+        reservable:     true
+        partner:        '@partner6'
+    product12:
+        name:           'Suite room 337103'
+        description:    'Suite room 337103'
+        identifier:     337103
+        sellable:       true
+        reservable:     true
+        partner:        '@partner6'
+    # Elloha
+    product13:
+        name:           'Standard room 441736'
+        description:    'Standard room 441736'
+        identifier:     441736
+        sellable:       true
+        reservable:     true
+        partner:        '@partner7'
+    product14:
+        name:           'Suite room 436361'
+        description:    'Suite room 436361'
+        identifier:     436361
+        sellable:       true
+        reservable:     true
+        partner:        '@partner7'
+    # Ericsoft
+    product15:
+        name:           'Standard room 438511'
+        description:    'Standard room 438511'
+        identifier:     438511
+        sellable:       true
+        reservable:     true
+        partner:        '@partner8'
+    product16:
+        name:           'Suite room 273628'
+        description:    'Suite room 273628'
+        identifier:     273628
+        sellable:       true
+        reservable:     true
+        partner:        '@partner8'
+    # Wubook
+    product17:
+        name:           'Standard room 320080'
+        description:    'Standard room 320080'
+        identifier:     320080
+        sellable:       true
+        reservable:     true
+        partner:        '@partner9'
+    product18:
+        name:           'Suite room 366455'
+        description:    'Suite room 366455'
+        identifier:     366455
+        sellable:       true
+        reservable:     true
+        partner:        '@partner9'
+    # Travelclick
+    product19:
+        name:           'Standard room 328383'
+        description:    'Standard room 328383'
+        identifier:     328383
+        sellable:       true
+        reservable:     true
+        partner:        '@partner10'
+    product20:
+        name:           'Suite room 463866'
+        description:    'Suite room 463866'
+        identifier:     463866
+        sellable:       true
+        reservable:     true
+        partner:        '@partner10'
+    # SmartHotel
+    product21:
+        name:           'Standard room 252039'
+        description:    'Standard room 252039'
+        identifier:     252039
+        sellable:       true
+        reservable:     true
+        partner:        '@partner11'
+    product22:
+        name:           'Suite room 207902'
+        description:    'Suite room 207902'
+        identifier:     207902
+        sellable:       true
+        reservable:     true
+        partner:        '@partner11'
+    product23:
+        name:           'Suite room 110223'
+        description:    'Suite room 110223'
+        identifier:     110223
+        sellable:       true
+        reservable:     true
+        partner:        '@partner12'
+        updatedAt:      <(new \DateTime('2019-12-15'))>
+    product24:
+        name:           'Suite room 110224'
+        description:    'Suite room 110224'
+        identifier:     110224
+        sellable:       false
+        reservable:     true
+        partner:        '@partner12'
+        updatedAt:      <(new \DateTime('2019-12-20'))>
+    product25:
+        name:           'Suite room 110225'
+        description:    'Suite room 110225'
+        identifier:     110225
+        sellable:       true
+        reservable:     true
+        partner:        '@partner13'
+
+    product26:
+        name:           'Suite room 110226'
+        description:    'Suite room 110226'
+        identifier:     110226
+        sellable:       true
+        reservable:     true
+        partner:        '@partner13'
+

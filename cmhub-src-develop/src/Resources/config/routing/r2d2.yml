@@ -1,0 +1,9 @@
+r2d2_api_get_availability_by_product:
+    path: /availability/{id}
+    defaults: { _controller: App\Controller\R2D2Controller::getAvailabilityAction }
+    methods:  [GET]
+
+r2d2_api_get_price_by_product:
+    path: /price/{id}
+    defaults: { _controller: App\Controller\R2D2Controller::getPriceAction }
+    methods:  [GET]

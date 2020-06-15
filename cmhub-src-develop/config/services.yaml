@@ -1,0 +1,262 @@
+imports:
+    - { resource: '../src/Resources/config/services.yml' }
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+        bind:
+            $environment: '%kernel.environment%'
+            $siteminderSoapServer: '@ota.v2010a.soap_server'
+            $smartboxSoapServer: '@ota.v2007b.soap_server'
+            $travelclickSoapServer: '@ota.v2015a.soap_server'
+            $smarthotelSoapServer: '@ota.v2016a.soap_server'
+            $applicationHost: '%application.host%'
+            $iresaDefaultLanguageCode: '%api.iresa.lang_code%'
+            $storageEngine: '@correlation_id.storage_engine.default_storage'
+            $iresaBookingEngine: '@App\Service\Iresa\IresaBookingEngine'
+    App\Service\BookingEngineInterface: '@App\Service\BookingEngineManager'
+
+    App\Service\Iresa\IresaApi:
+        public: true
+
+    Symfony\Component\HttpFoundation\JsonResponse: ~
+    Symfony\Component\HttpFoundation\Request: ~
+    Symfony\Component\HttpFoundation\Response: ~
+    App\Entity\TransactionChannel: ~
+
+    app.booking_engine: '@App\Service\BookingEngineManager'
+
+    Smartbox\CorrelationIdBundle\Service\GenerateAndStorageCorrelationId: '@correlation_id.service.generate_and_storage_correlation_id'
+
+    App\Service\BookingEngineManager:
+        public: true
+        calls:
+            - ['addBookingEngine', ['@App\Service\HubEngine\CmHubBookingEngine']]
+
+    App\Service\HubEngine\CmHubBookingEngine:
+        public: true
+
+    App\Service\HealthChecks\:
+        resource: '../src/Service/HealthChecks/*'
+        tags:
+            - { name: liip_monitor.check }
+
+    #####################################   DOCTRINE LISTENERS #######################################################
+
+    Gedmo\Timestampable\TimestampableListener:
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        calls:
+            - [ setAnnotationReader, [ '@annotation_reader' ] ]
+
+    App\EventListener\EntityListener:
+        tags:
+            - { name: doctrine.event_listener, event: onFlush }
+
+    App\EventListener\LoggableListener:
+        tags:
+            - { name: doctrine.event_listener, event: onFlush }
+            - { name: doctrine.event_listener, event: postFlush }
+
+    App\EventListener\ProductPartnerUpdatedListener:
+        tags:
+            - { name: doctrine.event_listener, event: preUpdate }
+            - { name: doctrine.event_listener, event: postFlush }
+
+    App\EventListener\MasterProductUpdatedListener:
+        tags:
+            - { name: doctrine.event_listener, event: preUpdate }
+            - { name: doctrine.event_listener, event: postFlush }
+
+    App\EventListener\PartnerListener:
+        tags:
+            - { name: doctrine.event_listener, event: preUpdate }
+            - { name: doctrine.event_listener, event: postFlush }
+            - { name: doctrine.event_listener, event: postUpdate }
+            - { name: doctrine.event_listener, event: postPersist }
+
+    App\EventListener\BookingListener:
+        tags:
+            - { name: doctrine.event_listener, event: postUpdate }
+            - { name: doctrine.event_listener, event: preUpdate }
+            - { name: doctrine.event_listener, event: postPersist }
+
+    App\EventListener\CommandListener:
+        tags:
+            - { name: kernel.event_listener, event: console.command, method: onConsoleCommand }
+
+
+    #####################################   END DOCTRINE LISTENERS ####################################################
+
+
+    #####################################   MESSENGER LISTENERS #######################################################
+
+    App\MessageHandler\EventListener\SendMessageToTransportsListener:
+        tags:
+            - { name: 'kernel.event_listener', event: Symfony\Component\Messenger\Event\SendMessageToTransportsEvent }
+
+    App\MessageHandler\EventListener\WorkerMessageFailedListener:
+        tags:
+            - { name: 'kernel.event_listener', event: Symfony\Component\Messenger\Event\WorkerMessageFailedEvent }
+
+    App\MessageHandler\EventListener\WorkerMessageHandledListener:
+        tags:
+            - { name: 'kernel.event_listener', event: Symfony\Component\Messenger\Event\WorkerMessageHandledEvent }
+
+    App\MessageHandler\EventListener\WorkerMessageReceivedListener:
+        tags:
+            - { name: 'kernel.event_listener', event: Symfony\Component\Messenger\Event\WorkerMessageReceivedEvent }
+
+    App\MessageHandler\EventListener\WorkerRunningListener:
+        tags:
+            - { name: 'kernel.event_listener', event: Symfony\Component\Messenger\Event\WorkerRunningEvent }
+
+    App\MessageHandler\EventListener\WorkerStartedListener:
+        tags:
+            - { name: 'kernel.event_listener', event: Symfony\Component\Messenger\Event\WorkerStartedEvent }
+
+    App\MessageHandler\EventListener\WorkerStoppedListener:
+        tags:
+            - { name: 'kernel.event_listener', event: Symfony\Component\Messenger\Event\WorkerStoppedEvent }
+
+    #####################################  END MESSENGER LISTENERS ####################################################
+
+    App\EventListener\RequestListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+
+    App\EventListener\ExceptionListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
+
+    App\Utils\Monolog\CmhubLogger:
+        tags:
+            - { name: monolog.logger, channel: cmhub}
+
+    App\Booking\BookingProcessorManager:
+        arguments:
+            # order of processors is important!
+            $processors:
+                - '@App\Booking\Processor\BookingAlreadyExistsProcessor'
+                - '@App\Booking\Processor\BookingRateProcessor'
+                - '@App\Booking\Processor\BookingExperiencePriceProcessor'
+                - '@App\Booking\Processor\BookingProductAmountProcessor'
+                - '@App\Booking\Processor\BookingAmountProcessor'
+                - '@App\Booking\Processor\BookingSetMasterProductProcessor'
+                - '@App\Booking\Processor\BookingSetChannelProcessor'
+                - '@App\Booking\Processor\BookingComponentsProcessor'
+                - '@App\Booking\Processor\BookingProductVoucherProcessor'
+                - '@App\Booking\Processor\BookingGuestProcessor'
+
+    # controllers are imported separately to make sure they're public
+    # and have a tag that allows actions to type-hint services
+    App\Controller\:
+        resource: '../src/Controller'
+        public: true
+        tags: ['controller.service_arguments']
+
+    ################################ Doctrine Listener ##################################
+    App\Repository\Listener\:
+        resource: '../src/Repository/Listener'
+        tags:
+            - { name: doctrine.orm.entity_listener}
+
+parameters:
+
+    application.host: '%env(APPLICATION_HOST)%'
+
+    channel_manager.siteminder.username: '%env(CHANNEL_MANAGER_SITEMINDER_USERNAME)%'
+    channel_manager.siteminder.password: '%env(CHANNEL_MANAGER_SITEMINDER_PASSWORD)%'
+    channel_manager.siteminder.endpoint: '%env(CHANNEL_MANAGER_SITEMINDER_ENDPOINT)%'
+
+    channel_manager.smarthotel.username: '%env(CHANNEL_MANAGER_SMARTHOTEL_USERNAME)%'
+    channel_manager.smarthotel.password: '%env(CHANNEL_MANAGER_SMARTHOTEL_PASSWORD)%'
+    channel_manager.smarthotel.endpoint: '%env(CHANNEL_MANAGER_SMARTHOTEL_ENDPOINT)%'
+
+    channel_manager.travelclick.username: '%env(CHANNEL_MANAGER_TRAVELCLICK_USERNAME)%'
+    channel_manager.travelclick.password: '%env(CHANNEL_MANAGER_TRAVELCLICK_PASSWORD)%'
+    channel_manager.travelclick.endpoint: '%env(CHANNEL_MANAGER_TRAVELCLICK_ENDPOINT)%'
+
+    channel_manager.availpro.username: '%env(CHANNEL_MANAGER_AVAILPRO_USERNAME)%'
+    channel_manager.availpro.password: '%env(CHANNEL_MANAGER_AVAILPRO_PASSWORD)%'
+    channel_manager.availpro.endpoint: '%env(CHANNEL_MANAGER_AVAILPRO_ENDPOINT)%'
+
+    channel_manager.bb8.username: '%env(CHANNEL_MANAGER_BB8_USERNAME)%'
+    channel_manager.bb8.password: '%env(CHANNEL_MANAGER_BB8_PASSWORD)%'
+    channel_manager.bb8.endpoint: '%env(CHANNEL_MANAGER_BB8_ENDPOINT)%'
+
+    channel_manager.wubook.username: '%env(CHANNEL_MANAGER_WUBOOK_USERNAME)%'
+    channel_manager.wubook.password: '%env(CHANNEL_MANAGER_WUBOOK_PASSWORD)%'
+    channel_manager.wubook.endpoint: '%env(CHANNEL_MANAGER_WUBOOK_ENDPOINT)%'
+
+    api.eai.username: '%env(EXTERNAL_API_EAI_USERNAME)%'
+    api.eai.password: '%env(EXTERNAL_API_EAI_PASSWORD)%'
+    api.eai.endpoint: '%env(EXTERNAL_API_EAI_ENDPOINT)%'
+
+    api.iresa.username: '%env(EXTERNAL_API_IRESA_USERNAME)%'
+    api.iresa.password: '%env(EXTERNAL_API_IRESA_PASSWORD)%'
+    api.iresa.endpoint: '%env(EXTERNAL_API_IRESA_ENDPOINT)%'
+    api.iresa.lang_code: '%env(EXTERNAL_API_IRESA_LANG_CODE)%'
+
+    api.jarvis.username: '%env(EXTERNAL_API_JARVIS_USERNAME)%'
+    api.jarvis.password: '%env(EXTERNAL_API_JARVIS_PASSWORD)%'
+    api.jarvis.endpoint: '%env(EXTERNAL_API_JARVIS_ENDPOINT)%'
+
+    internal.api.eai.password: '%env(INTERNAL_API_EAI_PASSWORD)%'
+    internal.api.iresa.password: '%env(INTERNAL_API_IRESA_PASSWORD)%'
+    internal.api.bb8.password: '%env(INTERNAL_API_BB8_PASSWORD)%'
+    internal.api.r2d2.password: '%env(INTERNAL_API_R2D2_PASSWORD)%'
+    internal.api.booking.password: '%env(INTERNAL_API_BOOKING_PASSWORD)%'
+
+    transaction_retry_threshold: '%env(TRANSACTION_RETRY_THRESHOLD)%'
+    guzzle.timeout: '%env(GUZZLE_TIMEOUT)%'
+
+    env(DATABASE_URL): 'mysql://root:root@db:3306/cmhub'
+    env(APP_SECRET): 'kjhsadkjhsadkjh12kj4312j312j4f3125g432'
+    env(SECURE_SCHEME): 'https'
+    env(APPLICATION_HOST): 'http://local.cmhub.smartbox.com'
+    env(CHANNEL_MANAGER_BB8_USERNAME): 'admin'
+    env(CHANNEL_MANAGER_BB8_PASSWORD): 'admin123'
+    env(CHANNEL_MANAGER_BB8_ENDPOINT): 'https://bb-8-api-stg.sbxtest.net/api/external/bookings'
+    env(CHANNEL_MANAGER_SITEMINDER_USERNAME): 'SmartboxTest'
+    env(CHANNEL_MANAGER_SITEMINDER_PASSWORD): 'L7bVaM4iN9lxXRh'
+    env(CHANNEL_MANAGER_SITEMINDER_ENDPOINT): 'https://cmtpi.siteminder.com/siteconnect/services/siteconnect_v1.1.0_inlined.wsdl'
+    env(CHANNEL_MANAGER_SMARTHOTEL_USERNAME): 'a61ce1a0-cfe9-46cb-948d-cbc8f3f63d00'
+    env(CHANNEL_MANAGER_SMARTHOTEL_PASSWORD): 'Sma180119!'
+    env(CHANNEL_MANAGER_SMARTHOTEL_ENDPOINT): 'https://sandbox.smarthotel.nl/Reservations/OTA_HotelResNotifRQ.aspx'
+    env(CHANNEL_MANAGER_AVAILPRO_USERNAME): 'Smartbox'
+    env(CHANNEL_MANAGER_AVAILPRO_PASSWORD): 'Ats4zSUK'
+    env(CHANNEL_MANAGER_AVAILPRO_ENDPOINT): 'https://smartbox.distributors.availproconnect.com/bookings'
+    env(CHANNEL_MANAGER_TRAVELCLICK_USERNAME): 'XXX'
+    env(CHANNEL_MANAGER_TRAVELCLICK_PASSWORD): 'XXX'
+    env(CHANNEL_MANAGER_TRAVELCLICK_ENDPOINT): 'XXX'
+    env(CHANNEL_MANAGER_WUBOOK_USERNAME): 'smartbox'
+    env(CHANNEL_MANAGER_WUBOOK_PASSWORD): 'ccf5c114-b643-4a37-b696-d1b2a31f667e'
+    env(CHANNEL_MANAGER_WUBOOK_ENDPOINT): 'https://wubook.net/__wdpushes__/195/?hotel_id='
+    env(EXTERNAL_API_EAI_USERNAME): 'cmh'
+    env(EXTERNAL_API_EAI_PASSWORD): 'B3vxi5uGTb'
+    env(EXTERNAL_API_EAI_ENDPOINT): 'http://eai.staging.sbxtest.net/api/rest/eai/'
+    env(EXTERNAL_API_IRESA_USERNAME): 'CM-API'
+    env(EXTERNAL_API_IRESA_PASSWORD): '06c6a93c696029c2da48be5f58b44755'
+    env(EXTERNAL_API_IRESA_ENDPOINT): 'http://devapollo.iresagw.smartbox-test.local/apipro'
+    env(EXTERNAL_API_IRESA_LANG_CODE): 'fr-FR'
+    env(EXTERNAL_API_JARVIS_ENDPOINT): 'http://ie1-tt-u3bok-01.sandbox.local/'
+    env(EXTERNAL_API_JARVIS_USERNAME): 'admin'
+    env(EXTERNAL_API_JARVIS_PASSWORD): 'admin'
+    env(INTERNAL_API_EAI_PASSWORD): '$2y$13$VIJDGAmnsBOU4j7MZr2wlegJwlxpgJqlaTTWhYk7x.JV8g02TSdLa'
+    env(INTERNAL_API_IRESA_PASSWORD): '$2a$10$bzz9hRa0adeHlSWbva871eBMVQKkGkEqS/vd5RZg7Y4OCJcJka7kC'
+    env(INTERNAL_API_BB8_PASSWORD): '$2a$10$VvM5dZG.qYYaJjLpwmLR5u9teXgMp5vr4Vnomc5kNRwNwvyrum13e'
+    env(INTERNAL_API_R2D2_PASSWORD): '$2y$12$kfh7EZNlYoKKtiTRsqP9..Az9zSgljnq.qvwFIr.io6e0zVn0Ubj2'
+    env(INTERNAL_API_BOOKING_PASSWORD): '$2y$12$QcEDz0fREmMdZHSuTtg4SeHlWaO0zlwFacxH7NOehi9c8wMVXC2Nq'
+    env(TRAVELCLICK_XMLNS): 'http://www.opentravel.org/OTA/2003/05'
+    env(NEWRELIC_API_KEY): ''
+    env(NEWRELIC_DEPLOY_NAME): 'PROD_CMHUB'
+    env(MESSENGER_TRANSPORT_DSN): 'doctrine://default'
+    env(TRANSACTION_RETRY_THRESHOLD): 5
+    env(GUZZLE_TIMEOUT): 5
+
+
+    locale: 'en'

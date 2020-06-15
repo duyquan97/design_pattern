@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+set -eu
+exec 2>&1
+
+COMMAND=/usr/local/bin/php
+OPTS="bin/console messenger:consume booking default --time-limit=3600 -vvv"
+
+# Check command is executable or not
+test -x ${COMMAND} || exit 0
+cd /app
+while true;do
+	date +%f
+	exec chpst -uwww-data ${COMMAND} ${OPTS}
+done

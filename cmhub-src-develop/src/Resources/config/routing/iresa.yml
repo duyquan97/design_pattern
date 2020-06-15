@@ -1,0 +1,4 @@
+api_iresa_push_bookings:
+    path: /api/int/rest/v1/PushBookings
+    defaults: { _controller: App\Controller\IresaController::pushBookingsAction }
+    methods:  [POST]

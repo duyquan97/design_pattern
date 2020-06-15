@@ -1,0 +1,176 @@
+liip_monitor:
+    enable_controller:    true
+    view_template:        null
+    mailer:
+        enabled:              false
+        recipient:            david.marsa@smartbox.com # Required
+        sender:               'cmhub@smartbox.com' # Required
+        subject:              Monitor Alert # Required
+        send_on_warning:      true
+    default_group:        default
+    checks:
+        # Grouping checks
+        groups:
+            default:
+                # Validate that a named extension or a collection of extensions is available
+                php_extensions:       [json, libxml, simplexml, soap] # Example: session.use_only_cookies: false
+
+                # Pairs of a PHP setting and an expected value
+                #                php_flags:            # Example: session.use_only_cookies: false
+                #
+                #                    # Prototype
+                #                    setting:              ~
+
+                # Pairs of a version and a comparison operator
+                php_version:          # Example: 5.4.15: >=
+                    # Prototype
+                    '7.1': '>='
+
+                # Process name/pid or an array of process names/pids
+                #                process_running:      ~ # Example: [apache, foo]
+
+                # Validate that a given path (or a collection of paths) is a dir and is readable
+                readable_directory:   ['%kernel.cache_dir%']
+
+                # Validate that a given path (or a collection of paths) is a dir and is writable
+                writable_directory:   ['%kernel.cache_dir%']
+
+                # Validate that a class or a collection of classes is available
+                #                class_exists:         [] # Example: ["Lua", "My\Fancy\Class"]
+
+                # Benchmark CPU performance and return failure if it is below the given ratio
+                cpu_performance:      ~ # Example: 1.0 # This is the power of an EC2 micro instance
+
+                # Checks to see if the disk usage is below warning/critical percent thresholds
+                disk_usage:
+                    warning:              70
+                    critical:             90
+                    path:                 '%kernel.cache_dir%'
+
+                # Checks to see if the OpCache memory usage is below warning/critical thresholds
+                #                opcache_memory:
+                #                    warning:              70
+                #                    critical:             90
+
+                #                # Checks to see if the APC memory usage is below warning/critical thresholds
+                #                apc_memory:
+                #                    warning:              70
+                #                    critical:             90
+                #
+                #                # Checks to see if the APC fragmentation is below warning/critical thresholds
+                #                apc_fragmentation:
+                #                    warning:              70
+                #                    critical:             90
+
+                # Connection name or an array of connection names
+                doctrine_dbal: default # Example: [default, crm]
+
+                #                # Checks to see if migrations from specified configuration file are applied
+                #                doctrine_migrations:
+                #                    # Examples:
+                #                    application_migrations:
+                #                        configuration_file:  '%kernel.root_dir%/config/vendor/doctrinemigrations.yml'
+                #                        connection:          default
+                #                    migrations_with_doctrine_bundle:
+                #                        connection:          default
+                #                    migrations_with_doctrine_bundle_v2: default
+                #
+                #                    # Prototype
+                #                    name:
+                #                        # Absolute path to doctrine migrations configuration
+                #                        configuration_file:   ~
+                #                        # Connection name from doctrine DBAL configuration
+                #                        connection:           default # Required
+                # Check if MemCache extension is loaded and given server is reachable
+                #          memcache:
+                #
+                #            # Prototype
+                #            name:
+                #              host:                 localhost
+                #              port:                 11211
+                #
+                #          # Validate that a Redis service is running
+                #          redis:
+                #
+                #            # Prototype
+                #            name:
+                #              host:                 localhost
+                #              port:                 6379
+                #              password:             null
+                #              # or
+                #              dsn: redis://localhost:6379
+
+                # Attempt connection to given HTTP host and (optionally) check status code and page content
+                #          http_service:
+                #
+                #            # Prototype
+                #            name:
+                #              host:                 localhost
+                #              port:                 80
+                #              path:                 /
+                #              status_code:          200
+                #              content:              null
+
+                # Attempt connection using Guzzle to given HTTP host and (optionally) check status code and page content
+                #          guzzle_http_service:
+                #
+                #            # Prototype
+                #            name:
+                #              url:                  localhost
+                #              headers:              []
+                #              options:              []
+                #              status_code:          200
+                #              content:              null
+                #              method:               GET
+                #              body:                 null
+                #
+                #          # Validate that a RabbitMQ service is running
+                #          rabbit_mq:
+                #
+                #            # Prototype
+                #            name:
+                #              host:                 localhost
+                #              port:                 5672
+                #              user:                 guest
+                #              password:             guest
+                #              vhost:                /
+                #              # or
+                #              dsn: amqp://guest:guest@localhost:5672/%2F
+
+                # Checks the version of this app against the latest stable release
+                symfony_version:      ~
+
+                # Checks if error pages have been customized for given error codes
+                #                custom_error_pages:
+                #                    error_codes:          [] # Required
+                #                    path:                 '%kernel.root_dir%'
+                #                    controller:           '%twig.exception_listener.controller%'
+
+                # Checks installed composer dependencies against the SensioLabs Security Advisory database
+                security_advisory:
+                    lock_file:            '%kernel.root_dir%/../composer.lock'
+
+                # Validate that a stream wrapper or collection of stream wrappers exists
+                stream_wrapper_exists:  [] # Example: ['zlib', 'bzip2', 'zip']
+
+                # Find and validate INI files
+                file_ini:             [] # Example: ['path/to/my.ini']
+
+                # Find and validate JSON files
+                file_json:            [] # Example: ['path/to/my.json']
+
+                # Find and validate XML files
+                file_xml:             [] # Example: ['path/to/my.xml']
+
+                # Find and validate YAML files
+                file_yaml:            [] # Example: ['path/to/my.yml']
+
+                # PDO connections to check for connection
+#                pdo_connections:
+#
+#                    # Prototype
+#                    name:
+#                        dsn:                  'mysql:host=localhost;dbname=testdb'
+#                        username:             null
+#                        password:             null
+#                        timeout:              1

@@ -1,0 +1,72 @@
+index:
+    path: /
+    defaults: { _controller: App\Controller\DefaultController::indexAction }
+
+##### Iresa calls against CMHUB #####
+iresa:
+    resource: 'routing/iresa.yml'
+
+##### EAI #####
+eai:
+    resource: 'routing/eai.yml'
+
+##### STANDARD #####
+api_cm_standard_v1_server:
+    path: /api/ext/soap/ota/v1/{action}
+    defaults: { _controller: App:Standard:server }
+    methods:  [POST]
+
+##### STANDARD #####
+standard:
+    resource: 'routing/standard.yml'
+    prefix: /api/ext/soap/ota/v2
+
+##### Wubook calls #####
+
+wubook_api:
+    path: /api/wubook
+    defaults: { _controller: App\Controller\WubookController::indexAction }
+    methods:  [POST]
+
+###### SmartHotel #########
+
+smarthotel_api_ota_wsdl:
+    path: /api/ext/soap/ota/smarthotel
+    defaults: { _controller: App\Controller\SmartHotelController::wsdlAction, path: "smarthotel.wsdl" }
+    methods:  [GET]
+
+smarthotel_api_ota_server:
+    path: /api/ext/soap/ota/smarthotel
+    defaults: { _controller: App\Controller\SmartHotelController::serverAction }
+    methods:  [POST]
+
+##### AvailPro calls #####
+availpro:
+    resource: 'routing/availpro.yml'
+
+##### TravelClick #####
+travelclick:
+    resource: 'routing/travelclick.yml'
+
+##### Siteminder #####
+siteminder:
+    resource: 'routing/siteminder.yml'
+
+##### Smartbox BB8 #####
+bb8:
+    resource: 'routing/bb8.yml'
+    prefix: /api/external
+
+##### Smartbox R2D2 #####
+r2d2:
+    resource: 'routing/r2d2.yml'
+    prefix: /r2d2
+
+booking:
+    resource: 'routing/booking.yml'
+
+##### Booking Template #####
+booking_template:
+    path: /templates/{cmId}/{bookingId}
+    defaults: { _controller: App\Controller\TemplateController::renderAction }
+    methods:  [GET]

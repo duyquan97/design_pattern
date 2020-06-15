@@ -1,0 +1,145 @@
+App\Entity\Partner:
+    partner1:
+        name:           'YieldPlanet Partner 1'
+        identifier:     '00019091'
+        status:         'partner'
+        channelManager: '@yieldplanet'
+        description:    'Test partner yieldplanet 00019091'
+        connected_at:   <(new \DateTime('now'))>
+        enabled:        true
+#        password: PAR00054714
+        password:       '\$2y\$13\$9iJuhbWCj/eqsGwBeBBOmOTvEfA28wkJn6S87jIGyaXwAUD3oRvRa'
+        user:           '@cmuser8'
+    partner2:
+        name:           'Availpro Partner 1'
+        identifier:     '00127978'
+        channelManager: '@availpro'
+        description:    'Test partner 00127978'
+        enabled:        true
+        status:         'partner'
+#        password is PAR00055626
+        password:       '\$2y\$13\$xVJhFTtYisCmg9LNRd2ECuYKKkK7ZhP/8/hRsBVAmyll3fC9NaC9O'
+    partner3:
+        name:           'ReservitHotel Partner 1'
+        identifier:     '00063498'
+        channelManager: '@reservithotel'
+        description:    'test partner 00063498'
+        enabled:        true
+        status:         'partner'
+#        password is PAR00035697
+        password:       '\$2y\$13\$m0dcngVIqmDGoPnla9QCx.qMC//jXeUIWiCpWr.ClEknN3Jxqc7iq'
+        user:           '@cmuser2'
+    partner4:
+        name:           'Siteminder Partner 1'
+        identifier:     '00019371'
+        channelManager: '@siteminder'
+        description:    'test partner 00019371'
+        enabled:        true
+        status:         'partner'
+        #        password is PAR00035697
+        password:       '\$2y\$13\$m0dcngVIqmDGoPnla9QCx.qMC//jXeUIWiCpWr.ClEknN3Jxqc7iq'
+        user:           '@cmuser3'
+    partner14:
+        name:           'Siteminder Partner 2'
+        identifier:     '00019372'
+        channelManager: '@siteminder'
+        description:    'disabled partner 00019372'
+        enabled:        false
+        status:         'partner'
+        #        password is PAR00035697
+        password:       '\$2y\$13\$m0dcngVIqmDGoPnla9QCx.qMC//jXeUIWiCpWr.ClEknN3Jxqc7iq'
+        user:           '@cmuser3'
+    partner5:
+        name:           'Ratetiger Partner 1'
+        identifier:     '00043051'
+        channelManager: '@ratetiger'
+        description:    'test partner 00043051'
+        enabled:        true
+        status:         'partner'
+        #        password is PAR00035697
+        password:       '\$2y\$13\$m0dcngVIqmDGoPnla9QCx.qMC//jXeUIWiCpWr.ClEknN3Jxqc7iq'
+        user:           '@cmuser4'
+    partner6:
+        name:           'Booking Expert Partner 1'
+        identifier:     '00044755'
+        channelManager: '@bookingexpert'
+        description:    'test partner 00044755'
+        enabled:        true
+        status:         'partner'
+        #        password is PAR00035697
+        password:       '\$2y\$13\$m0dcngVIqmDGoPnla9QCx.qMC//jXeUIWiCpWr.ClEknN3Jxqc7iq'
+        user:           '@cmuser5'
+    partner7:
+        name:           'Elloha Partner 1'
+        identifier:     '00125459'
+        channelManager: '@elloha'
+        description:    'test partner 00125459'
+        enabled:        true
+        status:         'partner'
+        #        password is PAR00035697
+        password:       '\$2y\$13\$m0dcngVIqmDGoPnla9QCx.qMC//jXeUIWiCpWr.ClEknN3Jxqc7iq'
+        user:           '@cmuser6'
+    partner8:
+        name:           'Ericsoft Partner 1'
+        identifier:     '00126517'
+        channelManager: '@ericsoft'
+        description:    'test partner 00126517'
+        enabled:        true
+        status:         'partner'
+        #        password is PAR00035697
+        password:       '\$2y\$13\$m0dcngVIqmDGoPnla9QCx.qMC//jXeUIWiCpWr.ClEknN3Jxqc7iq'
+        user:           '@cmuser7'
+    partner9:
+        name:           'Wubook Partner 1'
+        identifier:     '00145577'
+        channelManager: '@wubook'
+        description:    'test partner 00145577'
+        enabled:        true
+        status:         'partner'
+        connected_at:   <(new \DateTime('now'))>
+        #        password is PAR00035697
+        password:       '\$2y\$13\$m0dcngVIqmDGoPnla9QCx.qMC//jXeUIWiCpWr.ClEknN3Jxqc7iq'
+        user:           '@cmuser9'
+    partner10:
+        name:           'Travelclick test partner'
+        identifier:     '00145205'
+        channelManager: '@travelclick'
+        description:    'test partner 00145205'
+        enabled:        true
+        status:         'partner'
+        #        password is PAR00035697
+        password:       '\$2y\$13\$m0dcngVIqmDGoPnla9QCx.qMC//jXeUIWiCpWr.ClEknN3Jxqc7iq'
+        user:           '@cmuser10'
+
+    partner11:
+        name:           'Smarthotel test partner'
+        identifier:     '00019157'
+        channelManager: '@smarthotel'
+        description:    'test partner 00019157'
+        enabled:        true
+        status:         'partner'
+        #        password is PAR00035697
+        password:       '\$2y\$13\$m0dcngVIqmDGoPnla9QCx.qMC//jXeUIWiCpWr.ClEknN3Jxqc7iq'
+        user:           '@cmuser11'
+
+    partner12:
+        name:           'BB8 test partner - 1'
+        identifier:     '00019158'
+        channelManager: '@smartboxbb8'
+        description:    'test partner 00019158'
+        enabled:        true
+        status:         'partner'
+        #        password is PAR00035697
+        password:       '\$2y\$13\$m0dcngVIqmDGoPnla9QCx.qMC//jXeUIWiCpWr.ClEknN3Jxqc7iq'
+        user:           '@cmuser12'
+
+    partner13:
+        name:           'BB8 test partner - 2'
+        identifier:     '00019160'
+        channelManager: '@smartboxbb8'
+        description:    'test partner 00019160'
+        enabled:        true
+        status:         'partner'
+        #        password is PAR00035697
+        password:       '\$2y\$13\$m0dcngVIqmDGoPnla9QCx.qMC//jXeUIWiCpWr.ClEknN3Jxqc7iq'
+        user:           '@cmuser12'

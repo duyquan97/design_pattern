@@ -1,0 +1,130 @@
+services:
+    app.admin.channel_manager:
+        class: App\Admin\ChannelManagerAdmin
+        arguments: [~, App\Entity\ChannelManager, App\Controller\Admin\ChannelManagerAdminController, '@security.password_encoder']
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Channel Managers, label: Channel Managers, audit: true }
+        public: true
+
+    app.admin.cm_user:
+        class: App\Admin\CmUserAdmin
+        arguments: [~, App\Entity\CmUser, App\Controller\Admin\CmUserAdminController, '@security.password_encoder']
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Channel Managers, label: Channel Manager Users, audit: true }
+        public: true
+
+    app.admin.request_log:
+        class: App\Admin\RequestLogAdmin
+        arguments: [~, App\Entity\RequestLog, App\Controller\Admin\RequestLogAdminController]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Transactions & Imports, label: iResa Fail Requests }
+        public: true
+
+    app.admin.import_admin:
+        class: App\Admin\ImportDataAdmin
+        arguments:
+            - ~
+            - App\Entity\ImportData
+            - App\Controller\Admin\ImportDataAdminController
+            - '@security.token_storage'
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Transactions & Imports, label: Import History }
+        public: true
+
+    app.admin.broadcast_transaction:
+        class: App\Admin\TransactionAdmin
+        arguments: [~, App\Entity\Transaction, App\Controller\Admin\TransactionAdminController, '@App\Entity\TransactionChannel']
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Transactions & Imports, label: Transactions, pager_type: 'simple' }
+        public: true
+
+    app.admin.partner:
+        class: App\Admin\PartnerAdmin
+        arguments: [~, App\Entity\Partner, App\Controller\Admin\PartnerAdminController, '@security.password_encoder']
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Partner Information, label: Partners, audit: false }
+        public: true
+
+    app.admin.product:
+        class: App\Admin\ProductAdmin
+        arguments: [~, App\Entity\Product, App\Controller\Admin\ProductAdminController]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Partner Information, label: Rooms, audit: true }
+        public: true
+
+    app.admin.experience:
+        class: App\Admin\ExperienceAdmin
+        arguments: [~, App\Entity\Experience, App\Controller\Admin\ExperienceAdminController]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Partner Information, label: Experiences }
+        public: true
+
+    app.admin.availability:
+        class: App\Admin\AvailabilityAdmin
+        arguments:
+            - ~
+            - App\Entity\Availability
+            - App\Controller\Admin\AvailabilityAdminController
+            - '@App\Service\BookingEngineInterface'
+            - '@App\Model\Factory\ProductAvailabilityCollectionFactory'
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Pricing & Availability, label: Availabilities, audit: false, pager_type: 'simple' }
+        public: true
+
+    app.admin.product_rate:
+        class: App\Admin\ProductRateAdmin
+        arguments: [~, App\Entity\ProductRate, App\Controller\Admin\ProductRateAdminController]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Pricing & Availability, label: Price, pager_type: 'simple' }
+        public: true
+
+    app.admin.booking:
+        class: App\Admin\BookingAdmin
+        arguments: [~, App\Entity\Booking, App\Controller\Admin\BookingAdminController]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Bookings, label: Bookings }
+        public: true
+
+    app.admin.booking_product:
+        class: App\Admin\BookingProductAdmin
+        arguments: [~, App\Entity\BookingProduct, App\Controller\Admin\BookingProductAdminController]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Bookings, label: Bookings: Rooms }
+        public: true
+
+    app.admin.booking_product_rate:
+        class: App\Admin\BookingProductRateAdmin
+        arguments: [~, App\Entity\BookingProductRate, App\Controller\Admin\BookingProductRateAdminController]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Bookings, label: Bookings: Rates, audit: true }
+        public: true
+
+    app.admin.guest:
+        class: App\Admin\GuestAdmin
+        arguments: [~, App\Entity\Guest, App\Controller\Admin\GuestAdminController]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Bookings, label: Bookings: Guests }
+        public: true
+
+    sonata.user.admin.user:
+        class: "%sonata.user.admin.user.class%"
+        arguments: [~, "%sonata.user.admin.user.entity%", "%sonata.user.admin.user.controller%"]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "CMH Users", label_catalogue: "%sonata.user.admin.label_catalogue%", label: "CMH Users", icon: "<i class=\"fa fa-users\"></i>", audit: true}
+        calls:
+            - [ setUserManager, [ "@fos_user.user_manager" ] ]
+            - [ setTranslationDomain, [ "%sonata.user.admin.user.translation_domain%" ] ]
+
+    sonata.user.admin.group:
+        class: "%sonata.user.admin.group.class%"
+        arguments: [~, "%sonata.user.admin.group.entity%", "%sonata.user.admin.group.controller%"]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "CMH Users", label_catalogue: "%sonata.user.admin.label_catalogue%", label: "CMH Groups" }
+        calls:
+
+    app.admin.iresa:
+        class: App\Admin\IresaAdmin
+        arguments: [~, ~,App\Controller\Admin\IresaAdminController]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Iresa", label: "Availability" }
+        public: true

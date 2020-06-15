@@ -1,0 +1,156 @@
+App\Entity\ProductRate:
+    # yieldplanet
+    rate1:
+        product:        '@product1'
+        amount:         199
+        partner:        '@partner1'
+        createdAt:      <(new \DateTime('-1 day'))>
+        date:           <(new \DateTime('-1 day'))>
+    rate2:
+        product:        '@product2'
+        amount:         99
+        partner:        '@partner1'
+        createdAt:      <(new \DateTime('-1 day'))>
+        date:           <(new \DateTime('-1 day'))>
+    # availpro
+    rate3:
+        product:        '@product3'
+        amount:         199
+        partner:        '@partner2'
+        createdAt:      <(new \DateTime('-1 day'))>
+        date:           <(new \DateTime('-1 day'))>
+    rate4:
+        product:        '@product4'
+        amount:         99
+        partner:        '@partner2'
+        createdAt:      <(new \DateTime('-1 day'))>
+        date:           <(new \DateTime('-1 day'))>
+    # reservithotel
+    rate5:
+        product:        '@product5'
+        amount:         199
+        partner:        '@partner3'
+        createdAt:      <(new \DateTime('-1 day'))>
+        date:           <(new \DateTime('-1 day'))>
+    rate6:
+        product:        '@product6'
+        amount:         99
+        partner:        '@partner3'
+        createdAt:      <(new \DateTime('-1 day'))>
+        date:           <(new \DateTime('-1 day'))>
+    # Siteminder
+    rate7:
+        product:        '@product7'
+        amount:         199
+        partner:        '@partner4'
+        createdAt:      <(new \DateTime('-1 day'))>
+        date:           <(new \DateTime('-1 day'))>
+    rate8:
+        product:        '@product8'
+        amount:         99
+        partner:        '@partner4'
+        createdAt:      <(new \DateTime('-1 day'))>
+        date:           <(new \DateTime('-1 day'))>
+    # Ratetiger
+    rate9:
+        product:        '@product9'
+        amount:         199
+        partner:        '@partner5'
+        createdAt:      <(new \DateTime('-1 day'))>
+        date:           <(new \DateTime('-1 day'))>
+    rate10:
+        product:        '@product10'
+        amount:         199
+        partner:        '@partner5'
+        createdAt:      <(new \DateTime('-1 day'))>
+        date:           <(new \DateTime('-1 day'))>
+    # Booking Expert
+    rate11:
+        product:        '@product11'
+        amount:         199
+        partner:        '@partner6'
+        createdAt:      <(new \DateTime('-1 day'))>
+        date:           <(new \DateTime('-1 day'))>
+    rate12:
+        product:        '@product12'
+        amount:         199
+        partner:        '@partner6'
+        createdAt:      <(new \DateTime('-1 day'))>
+        date:           <(new \DateTime('-1 day'))>
+    # Elloha
+    rate13:
+        product:        '@product13'
+        amount:         199
+        partner:        '@partner7'
+        createdAt:      <(new \DateTime('-1 day'))>
+        date:           <(new \DateTime('-1 day'))>
+    rate14:
+        product:        '@product14'
+        amount:         199
+        partner:        '@partner7'
+        createdAt:      <(new \DateTime('-1 day'))>
+        date:           <(new \DateTime('-1 day'))>
+    # Ericsoft
+    rate15:
+        product:        '@product15'
+        amount:         199
+        partner:        '@partner8'
+        createdAt:      <(new \DateTime('-1 day'))>
+        date:           <(new \DateTime('-1 day'))>
+    rate16:
+        product:        '@product16'
+        amount:         199
+        partner:        '@partner8'
+        createdAt:      <(new \DateTime('-1 day'))>
+        date:           <(new \DateTime('-1 day'))>
+    # Wubook
+    rate17:
+        product:        '@product17'
+        amount:         199
+        partner:        '@partner9'
+        createdAt:      <(new \DateTime('2019-10-01'))>
+        date:           <(new \DateTime('2019-10-01'))>
+    rate18:
+        product:        '@product18'
+        amount:         199
+        partner:        '@partner9'
+        createdAt:      <(new \DateTime('2019-10-01'))>
+        date:           <(new \DateTime('2019-10-01'))>
+    # Travelclick
+    rate19:
+        product:        '@product19'
+        amount:         199
+        partner:        '@partner10'
+        createdAt:      <(new \DateTime('2019-03-15'))>
+        date:           <(new \DateTime('2019-03-15'))>
+    rate20:
+        product:        '@product20'
+        amount:         199
+        partner:        '@partner10'
+        createdAt:      <(new \DateTime('2019-03-15'))>
+        date:           <(new \DateTime('2019-03-15'))>
+    # SmartHotel
+    rate21:
+        product:        '@product21'
+        amount:         199
+        partner:        '@partner11'
+        createdAt:      <(new \DateTime('2019-03-15'))>
+        date:           <(new \DateTime('2019-03-15'))>
+    rate22:
+        product:        '@product22'
+        amount:         199
+        partner:        '@partner11'
+        createdAt:      <(new \DateTime('2019-03-15'))>
+        date:           <(new \DateTime('2019-03-15'))>
+    rate23:
+        product:        '@product21'
+        amount:         109.9
+        partner:        '@partner11'
+        createdAt:      <(new \DateTime('2019-03-16'))>
+        date:           <(new \DateTime('2019-03-16'))>
+    rate24:
+        product:        '@product22'
+        amount:         109.9
+        partner:        '@partner11'
+        createdAt:      <(new \DateTime('2019-03-16'))>
+        date:           <(new \DateTime('2019-03-16'))>

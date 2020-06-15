@@ -1,0 +1,8 @@
+sonata_core:
+    flashmessage:
+        success:
+            types:
+                - { type: app_bundle_admin_success }
+        error:
+            types:
+                - { type: app_bundle_admin_error}

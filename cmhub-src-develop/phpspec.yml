@@ -1,0 +1,63 @@
+suites:
+    default:
+        namespace: App
+        psr4_prefix: App
+
+extensions:
+    LeanPHP\PhpSpec\CodeCoverage\CodeCoverageExtension:
+        # Specify a list of formats in which code coverage report should be
+        # generated.
+        # Default: [html]
+        format:
+            - text
+            - html
+            #- clover
+            #- php
+            #- xml
+        #
+        # Specify output file/directory where code coverage report will be
+        # generated. You can configure different output file/directory per
+        # enabled format.
+        # Default: coverage
+        output:
+            html: coverage
+            #clover: coverage.xml
+            #php: coverage.php
+            #xml: coverage
+        #
+        # Should uncovered files be included in the reports?
+        # Default: true
+        #show_uncovered_files: true
+        #
+        # Set lower upper bound for code coverage
+        # Default: 35
+        #lower_upper_bound: 35
+        #
+        # Set high lower bound for code coverage
+        # Default: 70
+        #high_lower_bound: 70
+        #
+        # Whilelist directories for which code generation should be done
+        # Default: [src, lib]
+        #
+        whitelist:
+            - src
+        #
+        # Whiltelist files for which code generation should be done
+        # Default: empty
+        #whilelist_files:
+        #- app/bootstrap.php
+        #- web/index.php
+        #
+        # Blacklist directories for which code generation should NOT be done
+        blacklist:
+            - src/Entity
+            - src/Application
+            - src/Migrations
+            - src/Admin
+            - src/Kernel.php
+            - src/Exception
+        #
+        # Blacklist files for which code generation should NOT be done
+        #blacklist_files:
+        #- lib/bootstrap.php

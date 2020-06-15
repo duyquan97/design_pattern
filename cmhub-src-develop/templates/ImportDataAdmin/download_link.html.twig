@@ -1,0 +1,12 @@
+{% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}
+
+{% block field %}
+    {% if object.imported == false %}
+        <span class="label label-warning">Not imported yet</span>
+    {% elseif object.errors == 0 and object.imported == true %}
+        <span class="label label-success">Success</span>
+    {% elseif object.errors > 0 and object.imported == true %}
+        <a class="btn btn-success" href="{{ admin.generateUrl('download', {'id': object.id}) }}">Download File</a>
+    {% else %}
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,103 @@
+{% apply spaceless %}
+<OTA_HotelResNotifRQ Version="1.0"
+                     TimeStamp="{{ timestamp }}"
+                     EchoToken="{{ token }}"
+                     xmlns="http://www.opentravel.org/OTA/2003/05">
+    <POS>
+        <Source>
+            <BookingChannel Type="7">
+                <CompanyName Code="PartnerCode">{{ booking.getPartner.identifier }}</CompanyName>
+            </BookingChannel>
+        </Source>
+    </POS>
+    <HotelReservations>
+        <HotelReservation ResStatus="{{ booking.status }}"
+                          CreateDateTime="{{ booking.createdAt.format('c') }}">
+            <ResGlobalInfo>
+                <HotelReservationIDs>
+                    <HotelReservationID ResID_Type="13" ResID_Value="{{ booking.reservationId }}" />
+                </HotelReservationIDs>
+            </ResGlobalInfo>
+            <ResGuests>
+                {% for bookingProduct in booking.bookingProducts %}
+                <ResGuest ResGuestRPH="{{ loop.index }}">
+                    <Profiles>
+                    {% for guest in bookingProduct.guests %}
+                        {% if guest.isMain %}
+                        <ProfileInfo>
+                            <Profile>
+                                <Customer>
+                                    <PersonName>
+                                        <GivenName>{{ guest.name }}</GivenName>
+                                        <Surname>{{ guest.surname }}</Surname>
+                                    </PersonName>
+                                    <Telephone>{{ guest.phone }}</Telephone>
+                                    <Email>{{ guest.email }}</Email>
+                                    <Address>
+                                        <AddressLine>{{ guest.address }}</AddressLine>
+                                        <CityName>{{ guest.city }}</CityName>
+                                        <StateProv>{{ guest.city }}</StateProv>
+                                        <CountryName>{{ guest.country }}</CountryName>
+                                        <PostalCode>{{ guest.postalCode }}</PostalCode>
+                                    </Address>
+                                </Customer>
+                            </Profile>
+                        </ProfileInfo>
+                        {% endif %}
+                    {% endfor %}
+                    </Profiles>
+                    <SpecialRequests>
+                        {% for request in booking.requests %}
+                        <SpecialRequest>
+                            <Text>{{ request }}</Text>
+                        </SpecialRequest>
+                        {% endfor %}
+                    </SpecialRequests>
+                    <Comments>
+                        <Comment>
+                            <Text>{{ booking.comments }}</Text>
+                        </Comment>
+                    </Comments>
+                </ResGuest>
+                {% endfor %}
+            </ResGuests>
+            <RoomStays>
+                {% for room in booking.bookingProducts %}
+                <RoomStay IndexNumber="{{ loop.index }}">
+                    <BasicPropertyInfo HotelCode="{{ booking.getPartner.identifier }}" />
+                    <TimeSpan Start="{{ booking.getStartDate.format('Y-m-d') }}" End="{{ booking.getEndDate.format('Y-m-d') }}" />
+                    <GuestCounts>
+                        <GuestCount Count="{{ room.getTotalGuests }}" AgeQualifyingCode="10" />
+                    </GuestCounts>
+                    <Total CurrencyCode="{{ booking.getPartner.currency }}"
+                           AmountAfterTax="{{ room.totalAmount }}" />
+                    <RoomRates>
+                        <RoomRate NumberOfUnits="1"
+                                  RoomTypeCode="{{ room.getProduct.identifier }}"
+                                  RatePlanCode="{{ ratePlan }}">
+                            <Rates>
+                                {% for rate in room.rates %}
+                                <Rate RoomPricingType="Per night"
+                                      EffectiveDate="{{ rate.start.format('Y-m-d') }}"
+                                      ExpireDate="{{ rate.end|date_modify("+1 day")|date("Y-m-d") }}">
+                                    <Base AmountAfterTax="{{ rate.amount }}" />
+                                </Rate>
+                                {% endfor %}
+                            </Rates>
+                        </RoomRate>
+                    </RoomRates>
+                    <ResGuestRPHs>{{ loop.index }}</ResGuestRPHs>
+                    {% if loop.index == 1 %}
+                        <Comments>
+                            <Comment>
+                                <Text>{{ booking.comments }}</Text>
+                            </Comment>
+                        </Comments>
+                    {% endif %}
+                </RoomStay>
+                {% endfor %}
+            </RoomStays>
+        </HotelReservation>
+    </HotelReservations>
+</OTA_HotelResNotifRQ>
+{% endapply %}

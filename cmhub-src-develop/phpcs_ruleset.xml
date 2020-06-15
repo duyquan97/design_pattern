@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<ruleset name="Jarvis coding standard">
+    <description>Smartbox Jarvis coding standard</description>
+
+    <arg value="sp"/>
+
+    <file>src/</file>
+
+    <exclude-pattern>src/tests</exclude-pattern>
+    <exclude-pattern>src/Migrations</exclude-pattern>
+
+    <rule ref="vendor/escapestudios/symfony2-coding-standard/Symfony/ruleset.xml">
+        <!--Do not require the license block-->
+        <exclude name="Symfony.Commenting.License.Warning"/>
+        <!-- Concatenation may have spaces surrounding -->
+        <exclude name="Squiz.Strings.ConcatenationSpacing.PaddingFound"/>
+        <exclude name="Symfony.Commenting.FunctionComment.SpacingAfterParamType"/>
+    </rule>
+
+    <!--Line limit is 120 characters-->
+    <rule ref="Generic.Files.LineLength">
+        <properties>
+            <property name="lineLimit" value="450"/>
+            <property name="absoluteLineLimit" value="0"/>
+        </properties>
+    </rule>
+
+    <rule ref="Generic.Commenting.DocComment.ParamGroup"/>
+    <rule ref="Generic.Commenting.DocComment.SpacingBeforeTags"/>
+    <rule ref="Generic.Commenting.DocComment.NonParamGroup"/>
+    <rule ref="Generic.ControlStructures.InlineControlStructure"/>
+    <rule ref="Generic.Formatting.SpaceAfterCast"/>
+    <rule ref="Generic.Functions.CallTimePassByReference"/>
+    <rule ref="Generic.NamingConventions.UpperCaseConstantName"/>
+    <rule ref="Generic.PHP.LowerCaseConstant"/>
+
+    <rule ref="PEAR.ControlStructures.ControlSignature.Found"/>
+    <rule ref="PEAR.ControlStructures.MultiLineCondition.NewlineBeforeOpenBrace"/>
+    <rule ref="PEAR.Commenting.ClassComment.MissingAuthorTag"/>
+    <rule ref="PEAR.Commenting.FunctionComment.MissingReturn"/>
+    <rule ref="Generic.WhiteSpace.ScopeIndent.IncorrectExact"/>
+
+    <rule ref="Squiz.Arrays.ArrayBracketSpacing"/>
+    <rule ref="Squiz.ControlStructures.ControlSignature"/>
+    <rule ref="Squiz.ControlStructures.ForEachLoopDeclaration"/>
+    <rule ref="Squiz.ControlStructures.ForLoopDeclaration"/>
+    <rule ref="Squiz.ControlStructures.LowercaseDeclaration"/>
+    <rule ref="Squiz.PHP.LowercasePHPFunctions"/>
+    <rule ref="Squiz.Scope.MemberVarScope"/>
+
+    <rule ref="PEAR.Functions.FunctionCallSignature.ContentAfterOpenBracket">
+        <severity>1</severity>
+    </rule>
+    <rule ref="PEAR.Functions.FunctionCallSignature.CloseBracketLine">
+        <severity>1</severity>
+    </rule>
+    <rule ref="PEAR.Functions.FunctionCallSignature.SpaceAfterCloseBracket">
+        <severity>1</severity>
+    </rule>
+    <rule ref="Symfony.ControlStructure.IdenticalComparison.Warning">
+        <type>error</type>
+    </rule>
+
+    <rule ref="Zend.NamingConventions.ValidVariableName.NotCamelCaps">
+        <exclude name="Zend.NamingConventions.ValidVariableName.NotCamelCaps"/>
+    </rule>
+</ruleset>

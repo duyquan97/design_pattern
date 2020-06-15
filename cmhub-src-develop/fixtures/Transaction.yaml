@@ -1,0 +1,21 @@
+App\Entity\Transaction:
+    scheduled:
+        transactionId: 'aaaaaaaaaaaa'
+        statusCode: 200
+        status: 'scheduled'
+        channel: 'eai'
+        type: 'availability'
+        partner: '@partner1'
+        createdAt: <(new \DateTime('now'))>
+        updatedAt: <(new \DateTime('now'))>
+        sentAt: <(new \DateTime('now'))>
+    fail:
+        transactionId: 'bbbbbbbbbbbb'
+        statusCode: 400
+        status: 'failed'
+        channel: 'iresa'
+        type: 'booking'
+        partner: '@partner2'
+        createdAt: <(new \DateTime('now'))>
+        updatedAt: <(new \DateTime('now'))>
+        sentAt: <(new \DateTime('now'))>

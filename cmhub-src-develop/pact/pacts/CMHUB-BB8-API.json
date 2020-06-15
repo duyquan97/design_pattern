@@ -1,0 +1,115 @@
+{
+  "consumer": {
+    "name": "CMHUB"
+  },
+  "provider": {
+    "name": "BB8-API"
+  },
+  "interactions": [
+    {
+      "description": "POST Booking - Confirmation booking",
+      "request": {
+        "method": "POST",
+        "path": "/api/external/bookings",
+        "headers": {
+          "Content-Type": "application/json",
+          "Authorization": "Basic Y21odWI6YWRtaW4xMjM="
+        },
+        "body": [
+          {
+            "externalId": "RESA-8453628",
+            "dates": [
+              {
+                "date": "2020-01-08",
+                "externalRateBandId": "SBX",
+                "externalRoomId": "1017196"
+              }
+            ],
+            "bookingStatus": "commit",
+            "bookingType": "instant",
+            "externalPartnerId": "00538264",
+            "bookingStart": "2020-01-22",
+            "bookingEnd": "2020-01-29"
+          }
+        ]
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "success": [
+            {
+              "id": "8f2ab9f4-1c30-11ea-8ca1-0242ac190002",
+              "externalId": "RESA-8453628"
+            }
+          ]
+        },
+        "matchingRules": {
+          "$.body.success[0].id": {
+            "match": "type"
+          },
+          "$.body.success[0].externalId": {
+            "match": "type"
+          }
+        }
+      }
+    },
+    {
+      "description": "PUT Booking - Cancellation booking",
+      "request": {
+        "method": "PUT",
+        "path": "/api/external/bookings",
+        "headers": {
+          "Content-Type": "application/json",
+          "Authorization": "Basic Y21odWI6YWRtaW4xMjM="
+        },
+        "body": [
+          {
+            "externalId": "RESA-8453628",
+            "dates": [
+              {
+                "date": "2020-01-08",
+                "externalRateBandId": "SBX",
+                "externalRoomId": "1017196"
+              }
+            ],
+            "bookingStatus": "cancel",
+            "bookingType": "instant",
+            "externalPartnerId": "00538264",
+            "bookingStart": "2020-01-22",
+            "bookingEnd": "2020-01-29"
+          }
+        ]
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "success": [
+            {
+              "id": "8f2ab9f4-1c30-11ea-8ca1-0242ac190002",
+              "externalId": "RESA-8453628"
+            }
+          ]
+        },
+        "matchingRules": {
+          "$.body.success[0].id": {
+            "match": "type"
+          },
+          "$.body.success[0].externalId": {
+            "match": "type"
+          }
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "2.0.0"
+    }
+  }
+}

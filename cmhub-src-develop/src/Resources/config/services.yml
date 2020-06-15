@@ -1,0 +1,587 @@
+imports:
+    - { resource: 'services/admin.yml' }
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+        bind:
+            $environment: '%kernel.environment%'
+            $eaiHttpClient: '@app.eai.http_client'
+            $eaiUsername: '%api.eai.username%'
+            $eaiPassword: '%api.eai.password%'
+            $availproHttpClient: '@app.local.http_client.availpro'
+            $iresaUsername: '%api.iresa.username%'
+            $iresaPassword: '%api.iresa.password%'
+            $iresaHttpClient: '@iresa.http_client'
+            $bbEHttpClient: '@app.local.http_client.smartboxbb8'
+            $jarvisHttpClient: '@app.http_client.jarvis'
+            $siteminderHttpClient: '@app.local.http_client.siteminder'
+            $siteminderCredentials: '@app.channel_manager.siteminder.credential'
+            $smarthotelHttpClient: '@app.local.http_client.smarthotel'
+            $smarthotelCredentials: '@app.channel_manager.smarthotel.credential'
+            $travelclickHttpClient: '@app.local.http_client.travelclick'
+            $wubookHttpclient: '@app.http_client.wubook'
+            $wubookEndpoint: '%channel_manager.wubook.endpoint%'
+            $databaseArchive:
+                - '@app.archiver.transaction'
+                - '@app.archiver.availability'
+                - '@app.archiver.booking'
+                - '@app.archiver.room'
+
+    App\:
+        resource: '../../*'
+        exclude: '../../{Entity/*.php,Tests}'
+
+    App\Service\EAI\EAIProcessor:
+        public: true
+
+    #################################### SERIALIZERS ####################################
+
+    App\Service\Iresa\Serializer\IresaSerializer:
+        arguments:
+            $normalizers:
+                - '@App\Service\Iresa\Serializer\ProductAvailabilityCollectionNormalizer'
+                - '@App\Service\Iresa\Serializer\ProductRateCollectionNormalizer'
+                - '@App\Service\Iresa\Serializer\ProductRateNormalizer'
+                - '@App\Service\Iresa\Serializer\BookingCollectionNormalizer'
+                - '@App\Service\Iresa\Serializer\BookingNormalizer'
+                - '@App\Service\Iresa\Serializer\BookingProductNormalizer'
+                - '@App\Service\Iresa\Serializer\GuestNormalizer'
+                - '@App\Service\Iresa\Serializer\RateNormalizer'
+                - '@App\Service\Iresa\Serializer\ProductCollectionNormalizer'
+
+    App\Service\ChannelManager\AvailPro\Serializer\AvailProSerializer:
+        arguments:
+            $normalizers:
+                - '@App\Service\ChannelManager\AvailPro\Serializer\ProductAvailabilityNormalizer'
+                - '@App\Service\ChannelManager\AvailPro\Serializer\ProductRateNormalizer'
+
+    App\Service\ChannelManager\Wubook\Serializer\WubookSerializer:
+        arguments:
+            $normalizers:
+                - '@App\Service\ChannelManager\Wubook\Serializer\RateNormalizer'
+                - '@App\Service\ChannelManager\Wubook\Serializer\ProductRateCollectionNormalizer'
+                - '@App\Service\ChannelManager\Wubook\Serializer\AvailabilityNormalizer'
+                - '@App\Service\ChannelManager\Wubook\Serializer\ProductAvailabilityCollectionNormalizer'
+                - '@App\Service\ChannelManager\Wubook\Serializer\BookingProductNormalizer'
+                - '@App\Service\ChannelManager\Wubook\Serializer\BookingNormalizer'
+                - '@App\Service\ChannelManager\Wubook\Serializer\GuestNormalizer'
+                - '@App\Service\ChannelManager\Wubook\Serializer\BookingCollectionNormalizer'
+
+    App\Service\EAI\Serializer\EAISerializer:
+        arguments:
+            $normalizers:
+                - '@App\Service\EAI\Serializer\ProductRateCollectionNormalizer'
+                - '@App\Service\EAI\Serializer\ProductAvailabilityCollectionNormalizer'
+
+    ota.v2010a.serializer:
+        class: 'App\Service\ChannelManager\SoapOta\Serializer\SoapSerializer'
+        arguments:
+            $normalizers:
+                - '@App\Service\ChannelManager\SoapOta\Serializer\V2010A\RateNormalizer'
+                - '@App\Service\ChannelManager\SoapOta\Serializer\V2010A\ProductRateNormalizer'
+                - '@App\Service\ChannelManager\SoapOta\Serializer\V2010A\ProductRateCollectionNormalizer'
+                - '@App\Service\ChannelManager\SoapOta\Serializer\V2007B\ProductAvailabilityNormalizer'
+                - '@App\Service\ChannelManager\SoapOta\Serializer\V2007B\ProductRateNormalizer'
+                - '@App\Service\ChannelManager\SoapOta\Serializer\V2007B\ProductNormalizer'
+                - '@ota.siteminder.normalizer.booking_collection'
+                - '@ota.siteminder.normalizer.push_booking'
+                - '@ota.siteminder.normalizer.booking'
+                - '@App\Service\ChannelManager\Siteminder\Serializer\RateNormalizer'
+                - '@App\Service\ChannelManager\SoapOta\Serializer\V2007B\GuestNormalizer'
+                - '@ota.siteminder.normalizer.booking_product'
+
+
+    ota.v2016a.serializer:
+        class: 'App\Service\ChannelManager\SoapOta\Serializer\SoapSerializer'
+        arguments:
+            $normalizers:
+                - '@App\Service\ChannelManager\SoapOta\Serializer\V2016A\ProductCollectionNormalizer'
+                - '@App\Service\ChannelManager\SoapOta\Serializer\V2016A\ProductRateCollectionNormalizer'
+                - '@App\Service\ChannelManager\SoapOta\Serializer\V2016A\ProductRateNormalizer'
+
+    ota.v2007b.serializer:
+        class: 'App\Service\ChannelManager\SoapOta\Serializer\SoapSerializer'
+        arguments:
+            $normalizers:
+                - '@App\Service\ChannelManager\SoapOta\Serializer\V2007B\ProductAvailabilityNormalizer'
+                - '@App\Service\ChannelManager\SoapOta\Serializer\V2007B\ProductRateNormalizer'
+                - '@App\Service\ChannelManager\SoapOta\Serializer\V2007B\ProductNormalizer'
+                - '@App\Service\ChannelManager\SoapOta\Serializer\V2007B\BookingCollectionNormalizer'
+                - '@App\Service\ChannelManager\SoapOta\Serializer\V2007B\PushBookingNormalizer'
+                - '@App\Service\ChannelManager\SoapOta\Serializer\V2007B\BookingNormalizer'
+                - '@App\Service\ChannelManager\SoapOta\Serializer\V2007B\RateNormalizer'
+                - '@App\Service\ChannelManager\SoapOta\Serializer\V2007B\GuestNormalizer'
+                - '@App\Service\ChannelManager\SoapOta\Serializer\V2007B\BookingProductNormalizer'
+
+    ota.v2015a.serializer:
+        class: 'App\Service\ChannelManager\SoapOta\Serializer\SoapSerializer'
+        arguments:
+            $normalizers:
+                - '@App\Service\ChannelManager\SoapOta\Serializer\V2015A\ProductNormalizer'
+                - '@App\Service\ChannelManager\SoapOta\Serializer\V2015A\ProductRateNormalizer'
+
+    ################################## END SERIALIZERS ###################################
+
+
+    ################################## OTA INTEGRATIONS ##################################
+
+    # Siteminer Integration
+    ota.v2010a.integration:
+        class: 'App\Service\ChannelManager\SoapOta\SoapOtaIntegration'
+        arguments:
+            $soapOtaOperations:
+                - '@ota.operation.v2010.hotel_avail'
+                - '@App\Service\ChannelManager\SoapOta\Operation\V2007B\HotelAvailNotifOperation'
+                - '@App\Service\ChannelManager\SoapOta\Operation\V2010A\HotelRateAmountNotifOperation'
+                - '@App\Service\ChannelManager\SoapOta\Operation\V2007B\PingOperation'
+
+    # Smarthotel Integration
+    ota.v2016a.integration:
+        class: 'App\Service\ChannelManager\SoapOta\SoapOtaIntegration'
+        arguments:
+            $soapOtaOperations:
+                - '@App\Service\ChannelManager\SoapOta\Operation\V2007B\HotelInvCountNotifOperation'
+                - '@App\Service\ChannelManager\SoapOta\Operation\V2016A\HotelDescriptiveInfoOperation'
+                - '@App\Service\ChannelManager\SoapOta\Operation\V2007B\PingOperation'
+                - '@App\Service\ChannelManager\SoapOta\Operation\V2016A\HotelRatePlanOperation'
+                - '@App\Service\ChannelManager\SoapOta\Operation\V2016A\HotelRateAmountNotifOperation'
+                - '@App\Service\ChannelManager\SoapOta\Operation\V2016A\HotelBookingRuleNotifOperation'
+
+    # Standard Integration
+    ota.v2007b.integration:
+        class: 'App\Service\ChannelManager\SoapOta\SoapOtaIntegration'
+        arguments:
+            $soapOtaOperations:
+                - '@ota.operation.v2007b.hotel_avail'
+                - '@ota.operation.v2007b.hotel_inv_count'
+                - '@App\Service\ChannelManager\SoapOta\Operation\V2007B\HotelInvCountNotifOperation'
+                - '@App\Service\ChannelManager\SoapOta\Operation\V2007B\HotelAvailNotifOperation'
+                - '@App\Service\ChannelManager\SoapOta\Operation\V2007B\HotelRateAmountNotifOperation'
+                - '@ota.operation.v2015a.hotel_avail_get'
+                - '@ota.operation.v2007b.hotel_rate_plan'
+                - '@ota.operation.v2007b.read'
+                - '@App\Service\ChannelManager\SoapOta\Operation\V2007B\PingOperation'
+
+    # Travelclick Integration
+    ota.v2015a.integration:
+        class: 'App\Service\ChannelManager\SoapOta\SoapOtaIntegration'
+        arguments:
+            $soapOtaOperations:
+                - '@ota.operation.v2015a.hotel_product'
+                - '@App\Service\ChannelManager\SoapOta\Operation\V2007B\PingOperation'
+                - '@ota.operation.v2015a.hotel_avail_get'
+                - '@App\Service\ChannelManager\SoapOta\Operation\V2007B\HotelInvCountNotifOperation'
+                - '@App\Service\ChannelManager\SoapOta\Operation\V2015A\HotelAvailNotifOperation'
+                - '@App\Service\ChannelManager\SoapOta\Operation\V2015A\HotelRatePlanNotifOperation'
+                - '@ota.operation.v2015a.hotel_rate_plan'
+                - '@ota.operation.v2015a.hotel_inv_count'
+            $namespace: '%env(TRAVELCLICK_XMLNS)%'
+
+    App\Service\ChannelManager\Wubook\WubookIntegration:
+        arguments:
+            $operations:
+                - '@App\Service\ChannelManager\Wubook\Operation\GetRatesOperation'
+                - '@App\Service\ChannelManager\Wubook\Operation\GetRoomsOperation'
+                - '@App\Service\ChannelManager\Wubook\Operation\GetDataOperation'
+                - '@App\Service\ChannelManager\Wubook\Operation\UpdateDataOperation'
+                - '@App\Service\ChannelManager\Wubook\Operation\GetBookingsOperation'
+
+    App\Service\ChannelManager\BB8\BB8Integration:
+        arguments:
+            $operations:
+                - '@App\Service\ChannelManager\BB8\Operation\GetAvailabilityOperation'
+                - '@App\Service\ChannelManager\BB8\Operation\UpdateAvailabilityOperation'
+                - '@App\Service\ChannelManager\BB8\Operation\GetRoomsOperation'
+                - '@App\Service\ChannelManager\BB8\Operation\GetPriceOperation'
+                - '@App\Service\ChannelManager\BB8\Operation\UpdatePriceOperation'
+                - '@App\Service\ChannelManager\BB8\Operation\GetBookingsOperation'
+
+    ################################ END OTA INTEGRATIONS ################################
+
+    ################################ OTA OPERATIONS ######################################
+
+    App\Service\ChannelManager\SoapOta\Operation\V2016A\HotelDescriptiveInfoOperation:
+        arguments:
+            $soapSerializer: '@ota.v2016a.serializer'
+
+    App\Service\ChannelManager\SoapOta\Operation\V2016A\HotelRateAmountNotifOperation:
+        arguments:
+            $soapSerializer: '@ota.v2016a.serializer'
+
+    ota.operation.v2010.hotel_avail:
+        class: 'App\Service\ChannelManager\SoapOta\Operation\V2007B\HotelAvailOperation'
+        arguments:
+            $soapSerializer: '@ota.v2010a.serializer'
+
+    ota.operation.v2007b.hotel_avail:
+        class: 'App\Service\ChannelManager\SoapOta\Operation\V2007B\HotelAvailOperation'
+        arguments:
+            $soapSerializer: '@ota.v2007b.serializer'
+
+    ota.operation.v2007b.hotel_inv_count:
+        class: 'App\Service\ChannelManager\SoapOta\Operation\V2007B\HotelInvCountOperation'
+        arguments:
+            $soapSerializer: '@ota.v2007b.serializer'
+
+    ota.operation.v2007b.hotel_rate_plan:
+        class: 'App\Service\ChannelManager\SoapOta\Operation\V2007B\HotelRatePlanOperation'
+        arguments:
+            $soapSerializer: '@ota.v2007b.serializer'
+
+    ota.operation.v2007b.read:
+        class: 'App\Service\ChannelManager\SoapOta\Operation\V2007B\ReadOperation'
+        arguments:
+            $soapSerializer: '@ota.v2007b.serializer'
+
+    ota.operation.v2015a.hotel_avail_get:
+        class: 'App\Service\ChannelManager\SoapOta\Operation\V2015A\HotelAvailGetOperation'
+        arguments:
+            $soapSerializer: '@ota.v2015a.serializer'
+
+    ota.operation.v2015a.hotel_product:
+        class: 'App\Service\ChannelManager\SoapOta\Operation\V2015A\HotelProductOperation'
+        arguments:
+            $soapSerializer: '@ota.v2015a.serializer'
+
+    ota.operation.v2015a.hotel_rate_plan:
+        class: 'App\Service\ChannelManager\SoapOta\Operation\V2007B\HotelRatePlanOperation'
+        arguments:
+            $soapSerializer: '@ota.v2015a.serializer'
+
+    ota.operation.v2015a.hotel_inv_count:
+        class: 'App\Service\ChannelManager\SoapOta\Operation\V2007B\HotelInvCountOperation'
+        arguments:
+            $soapSerializer: '@ota.v2007b.serializer'
+
+    ################################ END OTA OPERATIONS ##################################
+
+    ################################ NORMALIZERS #########################################
+
+    ota.siteminder.normalizer.push_booking:
+        class: 'App\Service\ChannelManager\SoapOta\Serializer\V2007B\PushBookingNormalizer'
+        arguments:
+            - '@ota.siteminder.normalizer.booking'
+
+    ota.siteminder.normalizer.booking_collection:
+        class: 'App\Service\ChannelManager\SoapOta\Serializer\V2007B\BookingCollectionNormalizer'
+        arguments:
+            - '@ota.siteminder.normalizer.booking'
+
+    ota.siteminder.normalizer.booking:
+        class: 'App\Service\ChannelManager\SoapOta\Serializer\V2007B\BookingNormalizer'
+        arguments:
+            - '@App\Service\ChannelManager\SoapOta\Serializer\V2007B\GuestNormalizer'
+            - '@ota.siteminder.normalizer.booking_product'
+
+    ota.siteminder.normalizer.booking_product:
+        class: 'App\Service\ChannelManager\SoapOta\Serializer\V2007B\BookingProductNormalizer'
+        arguments:
+            - '@App\Service\ChannelManager\Siteminder\Serializer\RateNormalizer'
+
+    ################################ END NORMALIZERS #####################################
+
+    ################################ SOAP SERVERS ########################################
+
+    ota.v2015a.server:
+        class: '\SoapServer'
+        arguments:
+            - '%kernel.root_dir%/../public/travelclick.wsdl'
+            -
+                - 'soap_version': !php/const SOAP_1_2
+                - 'cache_wsdl': !php/const WSDL_CACHE_BOTH
+
+    ota.v2015a.soap_server:
+        class: 'App\Utils\SoapServer'
+        arguments:
+            $server: '@ota.v2015a.server'
+            $integration: '@ota.v2015a.integration'
+
+
+    ota.v2016a.server:
+        class: '\SoapServer'
+        arguments:
+            - '%kernel.root_dir%/../public/smarthotel.wsdl'
+            -
+                - 'soap_version': !php/const SOAP_1_2
+                - 'cache_wsdl': !php/const WSDL_CACHE_BOTH
+
+    ota.v2016a.soap_server:
+        class: 'App\Utils\SoapServer'
+        arguments:
+            $server: '@ota.v2016a.server'
+            $integration: '@ota.v2016a.integration'
+
+    ota.v2007b.server:
+        class: '\SoapServer'
+        arguments:
+            - '%kernel.root_dir%/../public/standard.wsdl'
+            -
+                - 'soap_version': !php/const SOAP_1_2
+                - 'cache_wsdl': !php/const WSDL_CACHE_BOTH
+
+    ota.v2007b.soap_server:
+        class: 'App\Utils\SoapServer'
+        arguments:
+            $server: '@ota.v2007b.server'
+            $integration: '@ota.v2007b.integration'
+
+    ota.v2010a.server:
+        class: '\SoapServer'
+        arguments:
+            - '%kernel.root_dir%/../public/siteminder.wsdl'
+            -
+                - 'soap_version': !php/const SOAP_1_2
+                - 'cache_wsdl': !php/const WSDL_CACHE_BOTH
+
+    ota.v2010a.soap_server:
+        class: 'App\Utils\SoapServer'
+        arguments:
+            $server: '@ota.v2010a.server'
+            $integration: '@ota.v2010a.integration'
+
+    ################################ END SOAP SERVERS ####################################
+
+
+    ################################ HTTP CLIENTS ########################################
+
+    iresa.http_client:
+        class: 'GuzzleHttp\Client'
+        arguments:
+            -
+                base_uri: '%api.iresa.endpoint%'
+                timeout: '%guzzle.timeout%'
+
+    app.http_client.availpro:
+        class: 'GuzzleHttp\Client'
+        arguments:
+            -
+                base_uri: '%channel_manager.availpro.endpoint%'
+                timeout: '%guzzle.timeout%'
+                auth: ['%channel_manager.availpro.username%', '%channel_manager.availpro.password%']
+
+    app.local.http_client.availpro:
+        class: 'App\Utils\HttpClient'
+        arguments:
+            - '@app.http_client.availpro'
+
+    app.eai.http_client:
+        class: 'GuzzleHttp\Client'
+        arguments:
+            -
+                base_uri: '%api.eai.endpoint%'
+                timeout: '%guzzle.timeout%'
+
+    app.http_client.smartboxbb8:
+        class: 'GuzzleHttp\Client'
+        arguments:
+            -
+                base_uri: '%channel_manager.bb8.endpoint%'
+                timeout: '%guzzle.timeout%'
+                auth: ['%channel_manager.bb8.username%', '%channel_manager.bb8.password%']
+
+    app.local.http_client.smartboxbb8:
+        class: 'App\Utils\HttpClient'
+        arguments:
+            - '@app.http_client.smartboxbb8'
+
+    app.http_client.jarvis:
+        class: 'GuzzleHttp\Client'
+        arguments:
+            - base_uri: '%api.jarvis.endpoint%'
+              timeout: '%guzzle.timeout%'
+              auth: ['%api.jarvis.username%', '%api.jarvis.password%']
+
+    app.local.http_client.jarvis:
+        class: 'App\Utils\HttpClient'
+        arguments:
+            - '@app.http_client.jarvis'
+
+    app.http_client.smarthotel:
+        class: 'GuzzleHttp\Client'
+        arguments:
+            -
+                base_uri: '%channel_manager.smarthotel.endpoint%'
+                timeout: '%guzzle.timeout%'
+
+    app.http_client.travelclick:
+        class: 'GuzzleHttp\Client'
+        arguments:
+            -
+                base_uri: '%channel_manager.travelclick.endpoint%'
+                timeout: '%guzzle.timeout%'
+
+    app.http_client.siteminder:
+        class: 'GuzzleHttp\Client'
+        arguments:
+            -
+                base_uri: '%channel_manager.siteminder.endpoint%'
+                timeout: '%guzzle.timeout%'
+                auth: ['%channel_manager.siteminder.username%', '%channel_manager.siteminder.password%']
+
+    app.local.http_client.smarthotel:
+        class: 'App\Utils\HttpClient'
+        arguments:
+            - '@app.http_client.smarthotel'
+
+    app.local.http_client.siteminder:
+        class: 'App\Utils\HttpClient'
+        arguments:
+            - '@app.http_client.siteminder'
+
+    app.local.http_client.travelclick:
+        class: 'App\Utils\HttpClient'
+        arguments:
+            - '@app.http_client.travelclick'
+
+    app.http_client.wubook:
+        class: 'GuzzleHttp\Client'
+        arguments:
+            -
+                timeout: '%guzzle.timeout%'
+                auth: ['%channel_manager.wubook.username%', '%channel_manager.wubook.password%']
+
+    ################################ END HTTP CLIENTS #####################################
+
+
+    ################################ CMs PUSH BOOKING #####################################
+
+    app.channel_manager.smarthotel.credential:
+        class: 'App\Model\Credential'
+        arguments:
+            - '%channel_manager.smarthotel.username%'
+            - '%channel_manager.smarthotel.password%'
+
+    app.channel_manager.siteminder.credential:
+        class: 'App\Model\Credential'
+        arguments:
+            - '%channel_manager.siteminder.username%'
+            - '%channel_manager.siteminder.password%'
+
+    App\Service\ChannelManager\ChannelManagerResolver:
+        arguments:
+            $channelManagerIntegrations:
+                - '@App\Service\ChannelManager\AvailPro\AvailProChannelManager'
+                - '@App\Service\ChannelManager\BB8\BB8ChannelManager'
+                - '@App\Service\ChannelManager\SmartHotel\SmartHotelChannelManager'
+                - '@App\Service\ChannelManager\Siteminder\SiteminderChannelManager'
+                - '@App\Service\ChannelManager\Travelclick\TravelclickChannelManager'
+                - '@App\Service\ChannelManager\Wubook\WubookChannelManager'
+
+    ################################ END CMs PUSH BOOKING #################################
+
+
+    app.soap_client.siteminder:
+        class: '\SoapClient'
+        lazy: true
+        arguments:
+            - '%channel_manager.siteminder.endpoint%'
+            -
+                trace: 1
+
+    app.soap_header.auth.credentials.siteminder:
+        class: '\SoapVar'
+        arguments:
+            -
+                Username: '%channel_manager.siteminder.username%'
+                Password: '%channel_manager.siteminder.password%'
+            - !php/const SOAP_ENC_OBJECT
+
+    app.soap_header.auth.siteminder:
+        class: '\SoapVar'
+        arguments:
+            -
+                UsernameToken: '@app.soap_header.auth.credentials.siteminder'
+            - !php/const SOAP_ENC_OBJECT
+
+    app.soap_header.siteminder:
+        class: '\SoapHeader'
+        arguments:
+            - 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd'
+            - 'Security'
+            - '@app.soap_header.auth.siteminder'
+
+    app.local.soap_client.siteminder:
+        class: 'App\Utils\SoapClient'
+        lazy: true
+        arguments:
+            - '@app.soap_client.siteminder'
+
+
+    App\Service\DataImport\ImportDataManager:
+        arguments:
+            $importers:
+                - '@App\Service\DataImport\ProductImporter'
+                - '@App\Service\DataImport\AvailabilityImporter'
+                - '@App\Service\DataImport\ExperienceImporter'
+
+    App\Service\Broadcaster\BroadcastManager:
+        arguments:
+            $broadcasters:
+                - '@App\Service\Broadcaster\IresaRateBroadcaster'
+                - '@App\Service\Broadcaster\IresaAvailabilityBroadcaster'
+                - '@App\Service\Broadcaster\BookingBroadcaster'
+                - '@App\Service\Broadcaster\EAIAvailabilityBroadcaster'
+                - '@App\Service\Broadcaster\EAIRateBroadcaster'
+            $maximumRetries: '%transaction_retry_threshold%'
+
+    App\Service\Synchronizer\DataSynchronizationManager:
+        arguments:
+            $synchronizers:
+                - '@App\Service\Synchronizer\AvailabilitySynchronizer'
+                - '@App\Service\Synchronizer\PriceSynchronizer'
+                - '@App\Service\Synchronizer\AvailabilityForcedAlignment'
+                - '@App\Service\Synchronizer\PriceForcedAlignment'
+
+    ################################ SESSION STORAGE #################################
+
+    Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler:
+        arguments:
+            #- 'mysql:dbname=mydatabase; host=myhost; port=myport'
+            #- { db_username: myuser, db_password: mypassword }
+
+            # If you're using Doctrine & want to re-use that connection, then:
+            # comment-out the above 2 lines and uncomment the line below
+            - !service { class: PDO, factory: ['@database_connection', 'getWrappedConnection'] }
+            # If you get transaction issues (e.g. after login) uncomment the line below
+            - { lock_mode: 1 }
+
+    ################################ END SESSION STORAGE #################################
+
+    app.archiver.transaction:
+        class: 'App\Service\Archives\DatabaseArchive'
+        arguments:
+            $tableSource: 'broadcasts'
+            $tableTarget: 'broadcasts_archives'
+            $conditions:
+                - 'not exists(SELECT transaction_id from availability where availability.transaction_id = broadcasts.id)'
+                - 'not exists(SELECT transaction_id from product_rate where product_rate.transaction_id = broadcasts.id)'
+                - 'not exists (SELECT transaction_id from bookings where bookings.transaction_id = broadcasts.id)'
+
+    app.archiver.availability:
+        class: 'App\Service\Archives\DatabaseArchive'
+        arguments:
+            $tableSource: 'availability'
+            $tableTarget: 'availability_archives'
+            $conditions:
+                - 'date < :date'
+
+    app.archiver.booking:
+        class: 'App\Service\Archives\DatabaseArchive'
+        arguments:
+            $tableSource: 'bookings'
+            $tableTarget: 'bookings_archives'
+            $conditions:
+                - 'end_date < :date'
+
+    app.archiver.room:
+        class: 'App\Service\Archives\DatabaseArchive'
+        arguments:
+            $tableSource: 'product_rate'
+            $tableTarget: 'product_rate_archives'
+            $conditions:
+                - 'date < :date'
+
+    App\Service\Archives\DatabaseArchive: '@app.archiver.transaction'

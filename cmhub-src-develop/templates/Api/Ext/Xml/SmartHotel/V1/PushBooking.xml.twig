@@ -1,0 +1,121 @@
+{% apply spaceless %}
+<?xml version="1.0" encoding="UTF-8"?>
+<OTA_HotelResNotifRQ PrimaryLangID="eng" Target="Production" TimeStamp="{{ 'now' | date('Y-m-d\TH:i:s.v\Z') }}"
+                     Version="1.0">
+    <POS>
+        <Source AgentDutyCode="SMA">
+            <RequestorID ID="{{ apiKey }}" MessagePassword="{{ apiPassword }}"></RequestorID>
+        </Source>
+    </POS>
+    <HotelReservations>
+        <HotelReservation ResStatus="Book" CreateDateTime="{{ booking.createdAt | date("Y-m-d\TH:i:s") }}"
+                          LastModifyDateTime="{{ booking.updatedAt | date("Y-m-d\TH:i:s") }}">
+            <RoomStays>
+                {% for bookingProduct in booking.bookingProducts %}
+                    <RoomStay>
+                        <RoomTypes>
+                            <RoomType RoomTypeCode="{{ bookingProduct.product.identifier }}" NumberOfUnits="1"/>
+                        </RoomTypes>
+                        <RoomRates>
+                            <RoomRate RatePlanCode="{{ ratePlan }}">
+                                <Rates>
+                                    {% for rate in bookingProduct.rates %}
+                                        <Rate EffectiveDate="{{ rate.date | date("Y-m-d", false) }}">
+                                            <Base AmountAfterTax="{{ (rate.amount * 100) | number_format }}"
+                                                  AmountBeforeTax="{{ (rate.amount * 100) | number_format }}"
+                                                  CurrencyCode="{{ booking.partner.currency }}" DecimalPlaces="2"/>
+                                        </Rate>
+                                    {% endfor %}
+                                </Rates>
+                            </RoomRate>
+                        </RoomRates>
+                        <RatePlans>
+                        </RatePlans>
+                        <GuestCounts>
+                            <GuestCount AgeQualifyingCode="10" Count="{{ bookingProduct.guests|length }}"
+                                        isPerRoom="true"/>
+                        </GuestCounts>
+                        <TimeSpan Start="{{ booking.startDate | date("Y-m-d", false) }}"
+                                  End="{{ booking.endDate | date("Y-m-d", false) }}"/>
+                        <SpecialRequests>
+                            {% for request in booking.requests %}
+                                <SpecialRequest>
+                                    <Text>{{ request }}</Text>
+                                </SpecialRequest>
+                            {% endfor %}
+                        </SpecialRequests>
+                        <Total AmountAfterTax="{{ (booking.totalAmount * 100) | number_format }}"
+                               AmountBeforeTax="{{ (booking.totalAmount * 100) | number_format }}"
+                               CurrencyCode="{{ booking.partner.currency }}" DecimalPlaces="2">
+                            <Taxes>
+                                <Tax Amount="0" CurrencyCode="{{ booking.partner.currency }}" DecimalPlaces="2"/>
+                            </Taxes>
+                        </Total>
+                        <ResGuestRPHs>
+                            <ResGuestRPH RPH="{{ loop.index }}"/>
+                        </ResGuestRPHs>
+                    </RoomStay>
+                {% endfor %}
+            </RoomStays>
+            <ResGuests>
+                {% for bookingProduct in booking.bookingProducts %}
+                    <ResGuest ResGuestRPH="{{ loop.index }}">
+                        <Profiles>
+                            {% for guest in bookingProduct.guests %}
+                                <ProfileInfo>
+                                    <Profile>
+                                        <Customer>
+                                            <PersonName>
+                                                <GivenName>{{ guest.name }}</GivenName>
+                                                <Surname>{{ guest.surname }}</Surname>
+                                            </PersonName>
+                                        </Customer>
+                                    </Profile>
+                                </ProfileInfo>
+                            {% endfor %}
+                        </Profiles>
+                    </ResGuest>
+                {% endfor %}
+            </ResGuests>
+            <ResGlobalInfo>
+                <Profiles>
+                    <ProfileInfo>
+                        <Profile ProfileType="1">
+                            {% if customer != false %}
+                                <Customer>
+                                    <PersonName>
+                                        <GivenName>{{ customer.name }}</GivenName>
+                                        <Surname>{{ customer.surname }}</Surname>
+                                    </PersonName>
+                                    <Telephone PhoneNumber="{{ customer.phone }}"/>
+                                    <Email>{{ customer.email }}</Email>
+                                    <Address>
+                                        <StreetNmbr>{{ customer.address }}</StreetNmbr>
+                                        <CityName>{{ customer.city }}</CityName>
+                                        <PostalCode>{{ customer.zipCode }}</PostalCode>
+                                        <CountryName>{{ customer.country }}</CountryName>
+                                    </Address>
+                                </Customer>
+                            {% endif %}
+                        </Profile>
+                    </ProfileInfo>
+                </Profiles>
+                <Comments>
+                    {% for comment in booking.comments %}
+                        <Comment>
+                            <Text>{{ comment }}</Text>
+                        </Comment>
+                    {% endfor %}
+                </Comments>
+                <Total AmountBeforeTax="{{ (booking.totalAmount * 100) | number_format }}"
+                       AmountAfterTax="{{ (booking.totalAmount * 100) | number_format }}"
+                       CurrencyCode="{{ booking.partner.currency }}" DecimalPlaces="2"/>
+                <BasicPropertyInfo HotelCode="{{ booking.partner.identifier }}"/>
+                <HotelReservationIDs>
+                    <HotelReservationID ResID_Value="{{ booking.identifier }}" ResID_Type="14"/>
+                </HotelReservationIDs>
+            </ResGlobalInfo>
+        </HotelReservation>
+    </HotelReservations>
+</OTA_HotelResNotifRQ>
+{% endapply %}

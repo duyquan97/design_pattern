@@ -1,0 +1,9 @@
+#!/bin/sh
+echo 'Pre-Commit hook starting'
+
+cd ..
+docker-compose exec -T app scripts/phpunit
+docker-compose exec -T app scripts/phpspec run --config phpspec.yml
+docker-compose exec -T app scripts/phpcs --config-set installed_paths vendor/escapestudios/symfony2-coding-standard
+docker-compose exec -T app scripts/phpcs --standard=phpcs_ruleset.xml
+docker-compose exec -T app scripts/phpmd src text phpmd_ruleset.xml

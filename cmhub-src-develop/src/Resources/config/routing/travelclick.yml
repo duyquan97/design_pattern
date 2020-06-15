@@ -1,0 +1,9 @@
+api_cm_travel_click_ota_wsdl:
+    path: /api/ext/soap/ota/travelclick
+    defaults: { _controller: App\Controller\TravelClickController::wsdlAction, path: travelclick.wsdl }
+    methods:  [GET]
+
+api_cm_travel_click_ota_server:
+    path: /api/ext/soap/ota/travelclick
+    defaults: { _controller: App\Controller\TravelClickController::serverAction }
+    methods:  [POST]

@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.1.1 r1855137">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
+      <stringProp name="TestPlan.comments"></stringProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+      <stringProp name="TestPlan.user_define_classpath"></stringProp>
+    </TestPlan>
+    <hashTree>
+      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="host" elementType="Argument">
+            <stringProp name="Argument.name">host</stringProp>
+            <stringProp name="Argument.value">eai-pp-one17.production.smartbox.com</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </Arguments>
+      <hashTree/>
+      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>false</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <threadCounts>true</threadCounts>
+          </value>
+        </objProp>
+        <stringProp name="filename"></stringProp>
+      </ResultCollector>
+      <hashTree/>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="EAILoadTesting" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">${__P(loopcount)}</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">${__P(threads)}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">${__P(rampup)}</stringProp>
+        <longProp name="ThreadGroup.start_time">1541693482000</longProp>
+        <longProp name="ThreadGroup.end_time">1541702905000</longProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration">30</stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+      </ThreadGroup>
+      <hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Broadcast Availability" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">[&#xd;
+    {&#xd;
+        &quot;rateBand&quot;: {&#xd;
+            &quot;code&quot;: &quot;SBX&quot;,&#xd;
+            &quot;partner&quot;: {&#xd;
+                &quot;id&quot;: &quot;${PartnerCode}&quot;&#xd;
+            }&#xd;
+        },&#xd;
+        &quot;product&quot;: {&#xd;
+            &quot;id&quot;: &quot;${RoomTypeCode1}&quot;&#xd;
+        },&#xd;
+        &quot;dateFrom&quot;: &quot;${StartDate1}&quot;,&#xd;
+        &quot;dateTo&quot;: &quot;${EndDate1}&quot;,&#xd;
+        &quot;updatedAt&quot;: &quot;${UpdatedDate}&quot;,&#xd;
+        &quot;quantity&quot;: 10&#xd;
+    },&#xd;
+    {&#xd;
+        &quot;rateBand&quot;: {&#xd;
+            &quot;code&quot;: &quot;SBX&quot;,&#xd;
+            &quot;partner&quot;: {&#xd;
+                &quot;id&quot;: &quot;00019091&quot;&#xd;
+            }&#xd;
+        },&#xd;
+        &quot;product&quot;: {&#xd;
+            &quot;id&quot;: &quot;${RoomTypeCode2}&quot;&#xd;
+        },&#xd;
+        &quot;dateFrom&quot;: &quot;${StartDate2}&quot;,&#xd;
+        &quot;dateTo&quot;: &quot;${EndDate2}&quot;,&#xd;
+        &quot;updatedAt&quot;: &quot;${UpdatedDate}&quot;,&#xd;
+        &quot;quantity&quot;: 20&#xd;
+    }&#xd;
+]</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${host}</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/api/rest/eai/v0/broadcast/channel_room_availability</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <UserParameters guiclass="UserParametersGui" testclass="UserParameters" testname="Availabilities Parameters" enabled="true">
+            <collectionProp name="UserParameters.names">
+              <stringProp name="394828577">StartDate1</stringProp>
+              <stringProp name="1764704840">EndDate1</stringProp>
+              <stringProp name="394828578">StartDate2</stringProp>
+              <stringProp name="1764704841">EndDate2</stringProp>
+              <stringProp name="1097602793">UpdatedDate</stringProp>
+            </collectionProp>
+            <collectionProp name="UserParameters.thread_values">
+              <collectionProp name="-308179274">
+                <stringProp name="1746558847">${__timeShift(yyyy-MM-dd&apos;T&apos;HH:mm:ss.&apos;+01:00&apos;,,P119D,,)}</stringProp>
+                <stringProp name="-802030238">${__timeShift(yyyy-MM-dd&apos;T&apos;HH:mm:ss.&apos;+01:00&apos;,,P138D,,)}</stringProp>
+                <stringProp name="-773401087">${__timeShift(yyyy-MM-dd&apos;T&apos;HH:mm:ss.&apos;+01:00&apos;,,P139D,,)}</stringProp>
+                <stringProp name="972977124">${__timeShift(yyyy-MM-dd&apos;T&apos;HH:mm:ss.&apos;+01:00&apos;,,P158D,,)}</stringProp>
+                <stringProp name="-1093990268">${__timeShift(yyyy-MM-dd&apos;T&apos;HH:mm:ss.&apos;+01:00&apos;,,,,)}</stringProp>
+              </collectionProp>
+            </collectionProp>
+            <boolProp name="UserParameters.per_iteration">false</boolProp>
+          </UserParameters>
+          <hashTree/>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Transaction-Id in Response header" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="1446529215">X-Transaction-Id</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message">Response body doesnt contain success message</stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_headers</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response code Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="49588">202</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message">Status reponse is wrong</stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">1</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Broadcast Price" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">[&#xd;
+    {&#xd;
+        &quot;rateBand&quot;: {&#xd;
+            &quot;code&quot;: &quot;SBX&quot;,&#xd;
+            &quot;partner&quot;: {&#xd;
+                &quot;id&quot;: &quot;${PartnerCode}&quot;&#xd;
+            }&#xd;
+        },&#xd;
+        &quot;product&quot;: {&#xd;
+            &quot;id&quot;: &quot;${RoomTypeCode1}&quot;&#xd;
+        },&#xd;
+        &quot;dateFrom&quot;: &quot;${StartDate1}&quot;,&#xd;
+        &quot;dateTo&quot;: &quot;${EndDate1}&quot;,&#xd;
+        &quot;updatedAt&quot;: &quot;${UpdatedDate}&quot;,&#xd;
+        &quot;price&quot;: {&#xd;
+            &quot;amount&quot;: 80,&#xd;
+            &quot;currencyCode&quot;: &quot;EUR&quot;&#xd;
+        }&#xd;
+    },&#xd;
+    {&#xd;
+        &quot;rateBand&quot;: {&#xd;
+            &quot;code&quot;: &quot;SBX&quot;,&#xd;
+            &quot;partner&quot;: {&#xd;
+                &quot;id&quot;: &quot;${PartnerCode}&quot;&#xd;
+            }&#xd;
+        },&#xd;
+        &quot;product&quot;: {&#xd;
+            &quot;id&quot;: &quot;${RoomTypeCode1}&quot;&#xd;
+        },&#xd;
+        &quot;dateFrom&quot;: &quot;${StartDate2}&quot;,&#xd;
+        &quot;dateTo&quot;: &quot;${EndDate2}&quot;,&#xd;
+        &quot;updatedAt&quot;: &quot;${UpdatedDate}&quot;,&#xd;
+        &quot;price&quot;: {&#xd;
+            &quot;amount&quot;: 100,&#xd;
+            &quot;currencyCode&quot;: &quot;EUR&quot;&#xd;
+        }&#xd;
+    },&#xd;
+    {&#xd;
+        &quot;rateBand&quot;: {&#xd;
+            &quot;code&quot;: &quot;SBX&quot;,&#xd;
+            &quot;partner&quot;: {&#xd;
+                &quot;id&quot;: &quot;${PartnerCode}&quot;&#xd;
+            }&#xd;
+        },&#xd;
+        &quot;product&quot;: {&#xd;
+            &quot;id&quot;: &quot;${RoomTypeCode2}&quot;&#xd;
+        },&#xd;
+        &quot;dateFrom&quot;: &quot;${StartDate1}&quot;,&#xd;
+        &quot;dateTo&quot;: &quot;${EndDate1}&quot;,&#xd;
+        &quot;updatedAt&quot;: &quot;${UpdatedDate}&quot;,&#xd;
+        &quot;price&quot;: {&#xd;
+            &quot;amount&quot;: 70,&#xd;
+            &quot;currencyCode&quot;: &quot;EUR&quot;&#xd;
+        }&#xd;
+    },&#xd;
+    {&#xd;
+        &quot;rateBand&quot;: {&#xd;
+            &quot;code&quot;: &quot;SBX&quot;,&#xd;
+            &quot;partner&quot;: {&#xd;
+                &quot;id&quot;: &quot;${PartnerCode}&quot;&#xd;
+            }&#xd;
+        },&#xd;
+        &quot;product&quot;: {&#xd;
+            &quot;id&quot;: &quot;${RoomTypeCode2}&quot;&#xd;
+        },&#xd;
+        &quot;dateFrom&quot;: &quot;${StartDate2}&quot;,&#xd;
+        &quot;dateTo&quot;: &quot;${EndDate2}&quot;,&#xd;
+        &quot;updatedAt&quot;: &quot;${UpdatedDate}&quot;,&#xd;
+        &quot;price&quot;: {&#xd;
+            &quot;amount&quot;: 90,&#xd;
+            &quot;currencyCode&quot;: &quot;EUR&quot;&#xd;
+        }&#xd;
+    }&#xd;
+]</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${host}</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/api/rest/eai/v0/broadcast/channel_room_price</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <UserParameters guiclass="UserParametersGui" testclass="UserParameters" testname="Price Parameters" enabled="true">
+            <collectionProp name="UserParameters.names">
+              <stringProp name="394828577">StartDate1</stringProp>
+              <stringProp name="1764704840">EndDate1</stringProp>
+              <stringProp name="394828578">StartDate2</stringProp>
+              <stringProp name="1764704841">EndDate2</stringProp>
+              <stringProp name="1097602793">UpdatedDate</stringProp>
+            </collectionProp>
+            <collectionProp name="UserParameters.thread_values">
+              <collectionProp name="-308179274">
+                <stringProp name="1746558847">${__timeShift(yyyy-MM-dd&apos;T&apos;HH:mm:ss.&apos;+01:00&apos;,,P119D,,)}</stringProp>
+                <stringProp name="-802030238">${__timeShift(yyyy-MM-dd&apos;T&apos;HH:mm:ss.&apos;+01:00&apos;,,P138D,,)}</stringProp>
+                <stringProp name="-773401087">${__timeShift(yyyy-MM-dd&apos;T&apos;HH:mm:ss.&apos;+01:00&apos;,,P139D,,)}</stringProp>
+                <stringProp name="972977124">${__timeShift(yyyy-MM-dd&apos;T&apos;HH:mm:ss.&apos;+01:00&apos;,,P158D,,)}</stringProp>
+                <stringProp name="-1093990268">${__timeShift(yyyy-MM-dd&apos;T&apos;HH:mm:ss.&apos;+01:00&apos;,,,,)}</stringProp>
+              </collectionProp>
+            </collectionProp>
+            <boolProp name="UserParameters.per_iteration">false</boolProp>
+          </UserParameters>
+          <hashTree/>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Transaction-Id in Response header" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="1446529215">X-Transaction-Id</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message">Response body doesnt contain success message</stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_headers</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response code Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="49588">202</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message">Status reponse is wrong</stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">1</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <UserParameters guiclass="UserParametersGui" testclass="UserParameters" testname="Global User Parameters" enabled="true">
+          <collectionProp name="UserParameters.names">
+            <stringProp name="-1652882763">PartnerCode</stringProp>
+            <stringProp name="-481846769">RoomTypeCode1</stringProp>
+            <stringProp name="-481846768">RoomTypeCode2</stringProp>
+          </collectionProp>
+          <collectionProp name="UserParameters.thread_values">
+            <collectionProp name="-629657536">
+              <stringProp name="-1172748304">00019091</stringProp>
+              <stringProp name="1480191555">235854</stringProp>
+              <stringProp name="1514297382">393333</stringProp>
+            </collectionProp>
+          </collectionProp>
+          <boolProp name="UserParameters.per_iteration">false</boolProp>
+        </UserParameters>
+        <hashTree/>
+        <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+          <collectionProp name="Asserion.test_strings">
+            <stringProp name="51508">400</stringProp>
+            <stringProp name="51511">403</stringProp>
+            <stringProp name="52469">500</stringProp>
+            <stringProp name="51509">401</stringProp>
+          </collectionProp>
+          <stringProp name="Assertion.custom_message">Response code is not expected one and test is failed</stringProp>
+          <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+          <boolProp name="Assertion.assume_success">false</boolProp>
+          <intProp name="Assertion.test_type">6</intProp>
+        </ResponseAssertion>
+        <hashTree/>
+        <AuthManager guiclass="AuthPanel" testclass="AuthManager" testname="HTTP Authorization Manager" enabled="true">
+          <collectionProp name="AuthManager.auth_list">
+            <elementProp name="" elementType="Authorization">
+              <stringProp name="Authorization.url"></stringProp>
+              <stringProp name="Authorization.username">cmh</stringProp>
+              <stringProp name="Authorization.password">B3vxi5uGTb</stringProp>
+              <stringProp name="Authorization.domain"></stringProp>
+              <stringProp name="Authorization.realm"></stringProp>
+            </elementProp>
+          </collectionProp>
+        </AuthManager>
+        <hashTree/>
+      </hashTree>
+      <ResultCollector guiclass="RespTimeGraphVisualizer" testclass="ResultCollector" testname="Response Time Graph" enabled="true">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>true</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <sentBytes>true</sentBytes>
+            <url>true</url>
+            <threadCounts>true</threadCounts>
+            <idleTime>true</idleTime>
+            <connectTime>true</connectTime>
+          </value>
+        </objProp>
+        <stringProp name="filename"></stringProp>
+      </ResultCollector>
+      <hashTree/>
+      <ResultCollector guiclass="StatGraphVisualizer" testclass="ResultCollector" testname="Aggregate Graph" enabled="true">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>true</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <sentBytes>true</sentBytes>
+            <url>true</url>
+            <threadCounts>true</threadCounts>
+            <idleTime>true</idleTime>
+            <connectTime>true</connectTime>
+          </value>
+        </objProp>
+        <stringProp name="filename"></stringProp>
+      </ResultCollector>
+      <hashTree/>
+      <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report" enabled="true">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>true</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <sentBytes>true</sentBytes>
+            <url>true</url>
+            <threadCounts>true</threadCounts>
+            <idleTime>true</idleTime>
+            <connectTime>true</connectTime>
+          </value>
+        </objProp>
+        <stringProp name="filename"></stringProp>
+      </ResultCollector>
+      <hashTree/>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>

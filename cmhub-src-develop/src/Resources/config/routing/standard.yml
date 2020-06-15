@@ -1,0 +1,9 @@
+api_cm_standard_ota_wsdl:
+    path: /
+    defaults: { _controller: App\Controller\StandardController::wsdlAction, $applicationHost: '%application.host%'  }
+    methods:  [GET]
+
+api_cm_standard_ota_server:
+    path: /
+    defaults: { _controller: App\Controller\StandardController::serverAction }
+    methods:  [POST]

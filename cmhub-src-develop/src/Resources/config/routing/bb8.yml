@@ -1,0 +1,34 @@
+bb8_api_get_availability:
+    path: /availabilities
+    defaults: { _controller: App\Controller\BB8Controller::getAvailabilityAction }
+    methods:  [GET]
+
+bb8_api_post_availability:
+    path: /availabilities
+    defaults: { _controller: App\Controller\BB8Controller::postAvailabilityAction }
+    methods:  [POST]
+
+bb8_api_get_rooms:
+    path: /rooms
+    defaults: { _controller: App\Controller\BB8Controller::getRoomsAction }
+    methods:  [GET]
+
+bb8_api_pricing_get:
+    path: /prices
+    defaults: { _controller: App\Controller\BB8Controller::getPricesAction }
+    methods:  [GET]
+
+bb8_api_pricing_post:
+    path: /prices
+    defaults: { _controller: App\Controller\BB8Controller::postPricesAction }
+    methods:  [POST]
+
+bb8_api_smoke_test:
+    path: /_ping
+    defaults: { _controller: App\Controller\BB8Controller::smokeTestAction }
+    methods:  [GET]
+
+bb8_api_get_bookings:
+    path: /bookings
+    defaults: { _controller: App\Controller\BB8Controller::getBookingsAction }
+    methods:  [GET]

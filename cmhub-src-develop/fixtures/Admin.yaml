@@ -1,0 +1,28 @@
+App\Application\Sonata\UserBundle\Entity\User:
+    user1:
+        username: 'benito'
+        username_canonical: 'benito'
+        email: 'admin@admin.com'
+        email_canonical: 'admin@admin.com'
+        enabled: 1
+        # password: adminuser
+        password: '\$2y\$13\$lbK/jcb/jjlKb9qZctyx8OcBYuZ9XBHcRQEJx9Iqm4adECRzk8h2y'
+        roles: [ROLE_SUPER_ADMIN]
+    user2:
+        username: 'adminuser'
+        username_canonical: 'adminuser'
+        email: 'adminuser@admin.com'
+        email_canonical: 'adminuser@admin.com'
+        enabled: 1
+        # password: adminuser
+        password: '\$2y\$13\$lbK/jcb/jjlKb9qZctyx8OcBYuZ9XBHcRQEJx9Iqm4adECRzk8h2y'
+        roles: [ROLE_SUPER_ADMIN]
+    user3:
+        username: 'staffuser'
+        username_canonical: 'staffuser'
+        email: 'staffuser@admin.com'
+        email_canonical: 'staffuser@admin.com'
+        enabled: 1
+        # password: adminuser
+        password: '\$2y\$13\$lbK/jcb/jjlKb9qZctyx8OcBYuZ9XBHcRQEJx9Iqm4adECRzk8h2y'
+        groups: ['@agents_group']

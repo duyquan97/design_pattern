@@ -1,0 +1,14 @@
+includes:
+    - vendor/phpstan/phpstan-symfony/extension.neon
+    - vendor/phpstan/phpstan-symfony/rules.neon
+
+parameters:
+    autoload_files:
+        - vendor/autoload.php
+    inferPrivatePropertyTypeFromConstructor: true
+    ignoreErrors:
+        - '#PHPDoc tag @throws with type [a-zA-Z0-9\\|]+ is not subtype of Throwable#'
+        - '#Call to an undefined method Doctrine\\Common\\Persistence\\ObjectRepository::[A-Za-z]+\(\).#'
+        - '#Call to an undefined method Sonata\\AdminBundle\\Datagrid\\ProxyQueryInterface::getEntityManager\(\).#'
+        - '#Access to an undefined property object::\$[A-Za-z0-9].#'
+        - '#Parameter \#[0-9]+ \$default of method Symfony\\Component\\Console\\Command\\Command::addOption\(\) expects [a-z|]+, [a-z]+ given.#'

@@ -1,0 +1,9 @@
+booking_api_post_create:
+    path: /booking
+    defaults: { _controller: App\Controller\BookingController::create }
+    methods:  [POST]
+
+booking_api_post_cancel:
+    path: /booking/{bookingId}/cancel
+    defaults: { _controller: App\Controller\BookingController::cancel }
+    methods:  [POST]

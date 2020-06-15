@@ -1,0 +1,11 @@
+{% extends 'SonataAdminBundle:CRUD:base_list_field.html.twig' %}
+
+{% block field %}
+    <div>
+        {% if object.status == 'Commit' %}
+            <span class="label label-success">Confirmed</span>
+        {% else %}
+            <span class="label label-danger">Canceled</span>
+        {% endif %}
+    </div>
+{% endblock %}

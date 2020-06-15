@@ -1,0 +1,634 @@
+services:
+  - mysql:latest
+
+stages:
+  - Build Image
+  - Build Dependencies
+  - Tests-Unit-Tests
+  - Contract-Tests
+  - Local-API-Tests
+  - Pact verification
+  - Deployment-DevInt
+  - API-Tests-Devint
+  - Performance-Tests-Devint
+  - can-i-deploy-to-preprod
+  - Deployment-Preprod
+  - API-Tests-Preprod
+  - Command PreProd
+  - Performance-Tests-Preprod
+  - Deployment-Prod
+  - Command Prod
+  - publish
+
+variables:
+  CURRENT_IMAGE: docker-registry.production.smartbox.com/cmhub/cmhub-app:${CI_PIPELINE_ID}_${CI_COMMIT_SHA}
+  CMHUB_DEV_IMAGE: docker-registry.production.smartbox.com/cmhub/cmhub-app:dev
+  CMHUB_DB_IMAGE: docker-registry.production.smartbox.com/cmhub/cmhub-mysql:test
+  CMHUB_PP_IMAGE: docker-registry.production.smartbox.com/cmhub/cmhub-app:preprod
+  CMHUB_NEWMAN_IMAGE: docker-registry.production.smartbox.com/cmhub/cmhub-runner:20200110
+  CMHUB_PROD_IMAGE: docker-registry.production.smartbox.com/cmhub/cmhub-app:latest
+  CMHUB_PHPSPEC_IMAGE: docker-registry.production.smartbox.com/cmhub/cmhub-phpspec:latest
+  DOCKER_COMPOSE_CMD: cd /opt/sbx/cmhub && docker-compose
+  DATABASE_URL: mysql://root:root@db:3306/cmhub
+  MYSQL_DATABASE: "cmhub_test"
+  MYSQL_ROOT_PASSWORD: "root"
+
+  PACT_CONSUMER: CMHUB
+  PACT_PROVIDER: BB8-API
+  PACT_BROKER: http://pactbroker.production.smartbox.com:30336
+  PACT_CONTRACT: pact/pacts/$PACT_CONSUMER-$PACT_PROVIDER.json
+  CI_COMMAND: "about"
+
+build-image:
+  stage: Build Image
+  except:
+    - /^QA-.*$/
+  before_script:
+    - echo "Building container"
+  script:
+    - docker pull docker-registry.production.smartbox.com/cmhub/cmhub-builder:20191010
+    - docker pull docker-registry.production.smartbox.com/cmhub/cmhub-runner:20200110
+    - docker build -f Dockerfiles/Dockerfile --build-arg SSH_PRIVATE_KEY="$SSH_PRIVATE_KEY" --build-arg SSH_KNOWN_HOSTS="$SSH_KNOWN_HOSTS" -t ${CURRENT_IMAGE} .
+    - docker push ${CURRENT_IMAGE}
+  tags:
+    - shell
+  only:
+    refs:
+      - develop
+      - tags
+
+build-composer:
+  stage: Build Dependencies
+  image: ${CMHUB_DEV_IMAGE}
+  dependencies:
+    - build-image
+  except:
+    - /^QA-.*$/
+  before_script:
+    - echo "Composer Artifact"
+  tags:
+    - k8s
+  script:
+    - composer install -n --no-progress --optimize-autoloader
+    - ./bin/phpunit -h
+  artifacts:
+    name: cmhub_artifact
+    paths:
+      - bin/.phpunit
+      - vendor/
+      - bin/
+    expire_in: 120 min
+
+phpunit:
+  stage: Tests-Unit-Tests
+  image: ${CMHUB_DEV_IMAGE}
+  services:
+    -   name: ${CMHUB_DB_IMAGE}
+        alias: db
+  dependencies:
+    - build-composer
+  except:
+    - /^QA-.*$/
+  before_script:
+    - echo "Running PHPUnit"
+  script:
+    - ./bin/console doctrine:database:create
+    - ./bin/console doctrine:migrations:migrate
+    - ./bin/console hautelook:fixtures:load
+    - ./bin/phpunit
+  tags:
+    - docker
+
+phpspec:
+  stage: Tests-Unit-Tests
+  image: ${CMHUB_DEV_IMAGE}
+  dependencies:
+    - build-composer
+  except:
+    - /^QA-.*$/
+  before_script:
+    - echo "Running PHPSpec"
+  script:
+    - phpdbg -qrr -d memory_limit=-1  bin/phpspec run
+  tags:
+    - k8s
+  artifacts:
+    paths:
+      - coverage
+
+dev-phpcs:
+  stage: Tests-Unit-Tests
+  image: ${CMHUB_DEV_IMAGE}
+  dependencies:
+    - build-composer
+  tags:
+    - k8s
+  script:
+    - bin/phpcs --standard=phpcs_ruleset.xml --ignore=tests src
+
+dev-phpmd:
+  stage: Tests-Unit-Tests
+  image: ${CMHUB_DEV_IMAGE}
+  dependencies:
+    - build-composer
+  tags:
+    - k8s
+  script:
+    - bin/phpmd src text phpmd_ruleset.xml --exclude src/Tests/,src/DataFixtures,src/Entity,src/Migrations,src/Repository,src/Admin,src/Model/Factory,src/Model/Booking.php
+
+dev-phpcpd:
+  stage: Tests-Unit-Tests
+  image: ${CMHUB_DEV_IMAGE}
+  dependencies:
+    - build-composer
+  tags:
+    - k8s
+  script:
+    - bin/phpcpd --progress src --exclude=Tests --exclude=Entity
+
+dev-phpstan:
+  stage: Tests-Unit-Tests
+  image: ${CMHUB_DEV_IMAGE}
+  dependencies:
+    - build-composer
+  before_script:
+    - echo "Running PHPStan"
+  tags:
+    - k8s
+  script:
+    - bin/phpstan analyse -l 2 -c phpstan.neon src
+
+.api-tests-template: &api-tests
+  image: ${CMHUB_DEV_IMAGE}
+  services:
+    -   name: ${CMHUB_DB_IMAGE}
+        alias: db
+  tags:
+    - docker
+
+
+local-api-tests:
+  <<: *api-tests
+  stage: Local-API-Tests
+  allow_failure: true
+  dependencies:
+    - build-composer
+  script:
+    - /start.sh &
+    - echo "waiting services initialization" && sleep 5
+    - ./bin/console doctrine:database:create
+    - ./bin/console doctrine:migrations:migrate
+    - ./bin/console hautelook:fixtures:load
+    - mkdir -p ${CI_PROJECT_DIR}/cmhub/LOCAL/
+    - newman run tests/PostmanScripts/CMHUB_APIs-Automation.postman_collection.json -e tests/PostmanScripts/LOCAL.postman_environment.json --folder SBX\ API\ -\ OTA\ 2007B  --folder SmartHotel\ -\ OTA\ 2016A --folder Siteminder\ -\ OTA\ 2007B --folder Travelclick\ -\ OTA\ 2015A --folder Wubook\ -\ JSON\ API --folder BB8\ -\ JSON\ API -r htmlextra --reporter-htmlextra-export=${CI_PROJECT_DIR}/cmhub/LOCAL/newman-report.html
+  only:
+    - branches
+    - develop
+  except:
+    - tags
+    - master
+  artifacts:
+    when: always
+    paths:
+      - ${CI_PROJECT_DIR}/cmhub/LOCAL/newman-report.html
+
+contract-test:
+  stage: Contract-Tests
+  image: ${CMHUB_DEV_IMAGE}
+  allow_failure: false
+  dependencies:
+    - build-composer
+  before_script:
+    - echo "Running Contract test"
+  script:
+    - php ./bin/phpunit -vvv --config=./pact/phpunit.pact.xml
+  artifacts:
+    paths:
+      - $PACT_CONTRACT
+  only:
+    - branches
+    - develop
+  tags:
+    - k8s
+
+publish contract pact:
+  stage: Contract-Tests
+  image: docker-registry.production.smartbox.com/pact-verifier-curl:latest
+  before_script:
+    - "echo \"Publishing consumer contract for version: ${CI_COMMIT_TAG}\""
+  script:
+    - pact-broker create-version-tag --pacticipant CMHUB --broker-base-url http://pactbroker.production.smartbox.com:30336 --version ${CI_COMMIT_TAG} --tag developcmhub stablecmhub -vvv
+    - "curl -s -XPUT -H \"Content-Type: application/json\" -d@pact/pacts/CMHUB-BB8-API.json ${PACT_BROKER}/pacts/provider/${PACT_PROVIDER}/consumer/${PACT_CONSUMER}/version/${CI_COMMIT_TAG}"
+  allow_failure: false
+  only:
+    - tags
+  tags:
+    - k8s
+
+can-i-deploy-to-preprod-stable:
+  stage: can-i-deploy-to-preprod
+  tags:
+    - k8s
+  image:
+    name: docker-registry.production.smartbox.com/pact-verifier-curl:latest
+  script:
+    - pact-broker can-i-deploy -a, --pacticipant CMHUB -b, --broker-base-url http://pactbroker.production.smartbox.com:30336 -l stablecmhub
+  allow_failure: true
+  only:
+    - tags
+
+pact-verification-stable:
+  stage: Pact verification
+  image: docker-registry.production.smartbox.com/pact-verifier-curl:latest
+  script:
+    - if [ -z $CI_COMMIT_TAG ] ; then PUBLISH='' ; else PUBLISH="-r --provider-app-version=${CI_COMMIT_TAG%RC*}" ; echo 'Verification is going to be published to Pact Broker' ; fi
+    - pact-provider-verifier --provider-base-url=https://ie1-t-u3cmh-01.sbxtest.net --pact-broker-base-url=$PACT_BROKER --consumer-version-tag=stablebb8api --provider=CMHUB $PUBLISH
+  tags:
+    - k8s
+  only:
+    refs:
+      - develop
+      - tags
+    variables:
+      - $CI == 'true'
+  except:
+    - schedules
+
+pact-verification-develop:
+  stage: Pact verification
+  image: docker-registry.production.smartbox.com/pact-verifier-curl:latest
+  script:
+    - pact-provider-verifier --provider-base-url=https://ie1-t-u3cmh-01.sbxtest.net --pact-broker-base-url=$PACT_BROKER --consumer-version-tag=developbb8api --provider=CMHUB
+  tags:
+    - k8s
+  only:
+    refs:
+      - develop
+    variables:
+      - $CI == 'true'
+  allow_failure: true
+  except:
+    - schedules
+
+deploy-dev:
+  stage: Deployment-DevInt
+  allow_failure: false
+  environment:
+    name: ben
+    url: http://ie1-te-cmhub-01.sbxtest.net
+  when: on_success
+  variables:
+    DEPLOYMENT_NODE_1: 'ssh -i ~/.ssh/id_rsa_deployer rundeck@ie1-t-u3cmh-01.sbxtest.net'
+  before_script:
+    - echo "Tagging image and Deploying for PROJECT ENVIRONMENT"
+  script:
+    # Pull latest file from Vault
+    - ${DEPLOYMENT_NODE_1} "/opt/sbx/cmhub/pull.rb --get_kv"
+    - docker tag ${CURRENT_IMAGE} ${CMHUB_DEV_IMAGE}
+    - docker push ${CMHUB_DEV_IMAGE}
+    - $DEPLOYMENT_NODE_1 "docker pull ${CMHUB_DEV_IMAGE}"
+    # Do migrations
+    - $DEPLOYMENT_NODE_1 "docker run --rm -u www-data -v /opt/sbx/cmhub/.env:/app/.env:ro ${CMHUB_DEV_IMAGE} /bin/bash -c ' cd /app/ && ./bin/console doctrine:migrations:migrate --no-interaction '"
+
+    - $DEPLOYMENT_NODE_1 "${DOCKER_COMPOSE_CMD} up -d"
+    - $DEPLOYMENT_NODE_1 "docker exec -t -u www-data cmhub_cmhub_1 /bin/bash -c 'cd /app/ && ./composer.phar dump-env prod'"
+    - $DEPLOYMENT_NODE_1 "docker exec -t -u www-data cmhub_cmhub_1 /bin/bash -c 'cd /app/ && ./bin/console doctrine:migrations:migrate --no-interaction && ./bin/console cache:clear'"
+    # Remove duplicated availabilities/rates
+    - $DEPLOYMENT_NODE_1 "docker exec -t -u www-data cmhub_cmhub_1 /bin/bash -c 'cd /app/ && ./bin/console cmhub:duplication:remove'"
+  tags:
+    - shell
+  only:
+    - develop
+
+deploy-cmhstable:
+  stage: Deployment-Prod
+  allow_failure: false
+  environment:
+    name: cmhstable
+    url: http://ie1-te-cmhst-01.sbxtest.net
+    #  when: on_success
+  variables:
+    DEPLOYMENT_NODE_1: 'ssh -i ~/.ssh/id_rsa_deployer rundeck@ie1-te-cmhst-01.sbxtest.net'
+  only:
+    - tags
+  when: manual
+  before_script:
+    - echo "Tagging image and Deploying for PROJECT ENVIRONMENT"
+  script:
+    - docker tag ${CURRENT_IMAGE} ${CMHUB_DEV_IMAGE}
+    - docker push ${CMHUB_DEV_IMAGE}
+    # Pull latest file from Vault
+    - ${DEPLOYMENT_NODE_1} "sudo /opt/sbx/cmhub/pull.rb --get_kv"
+    - ${DEPLOYMENT_NODE_1} "docker pull ${CMHUB_DEV_IMAGE}"
+    # Do migrations
+    - $DEPLOYMENT_NODE_1 "docker run --rm -u www-data -v /opt/sbx/cmhub/.env:/app/.env:ro ${CMHUB_DEV_IMAGE} /bin/bash -c ' cd /app/ && ./bin/console doctrine:migrations:migrate --no-interaction '"
+    - ${DEPLOYMENT_NODE_1} "${DOCKER_COMPOSE_CMD} up -d"
+    - ${DEPLOYMENT_NODE_1} "docker exec -t -u www-data cmhub_cmhub_1 /bin/bash -c 'cd /app/ && ./composer.phar dump-env prod'"
+    # This can be deleted after check that the migrations above is working well
+    - ${DEPLOYMENT_NODE_1} "docker exec -t -u www-data cmhub_cmhub_1 /bin/bash -c 'cd /app/ && ./bin/console doctrine:migrations:migrate --no-interaction && ./bin/console cache:clear'"
+    # Remove duplicated availabilities/rates
+    - ${DEPLOYMENT_NODE_1} "docker exec -t -u www-data cmhub_cmhub_1 /bin/bash -c 'cd /app/ && ./bin/console cmhub:duplication:remove'"
+  tags:
+    - shell
+
+deploy-preprod:
+  stage: Deployment-Preprod
+  allow_failure: false
+  environment:
+    name: ie1-preprod
+    url: http://ie1-pp-cmh-01.sbxtest.net
+  when: on_success
+  only:
+    - tags
+  before_script:
+    - echo "Tagging image and Deploying for PROJECT ENVIRONMENT"
+  script:
+    - docker tag ${CURRENT_IMAGE} ${CMHUB_DEV_IMAGE}
+    - docker push ${CMHUB_DEV_IMAGE}
+    # Pull latest file from Vault
+    - ssh -i ~/.ssh/id_rsa_deployer rundeck@ie1-pp-cmh-01.sbxtest.net "/opt/sbx/cmhub/pull.rb -g -a prod"
+    - ssh -i ~/.ssh/id_rsa_deployer rundeck@ie1-pp-cmh-01.sbxtest.net  "docker pull ${CMHUB_DEV_IMAGE}"
+    # Do migrations
+    - ssh -i ~/.ssh/id_rsa_deployer rundeck@ie1-pp-cmh-01.sbxtest.net  "docker run --rm -u www-data -v /opt/sbx/cmhub/.env:/app/.env:ro ${CMHUB_DEV_IMAGE} /bin/bash -c ' cd /app/ && ./bin/console doctrine:migrations:migrate --no-interaction '"
+    - ssh -i ~/.ssh/id_rsa_deployer rundeck@ie1-pp-cmh-01.sbxtest.net  "${DOCKER_COMPOSE_CMD} up -d"
+    - ssh -i ~/.ssh/id_rsa_deployer rundeck@ie1-pp-cmh-01.sbxtest.net "docker exec -t -u www-data cmhub_cmhub_1 /bin/bash -c 'cd /app/ && ./composer.phar dump-env prod'"
+    # This can be deleted after check that the migrations above is working well
+    - ssh -i ~/.ssh/id_rsa_deployer rundeck@ie1-pp-cmh-01.sbxtest.net "docker exec -t -u www-data cmhub_cmhub_1 /bin/bash -c 'cd /app/ && ./bin/console doctrine:migrations:migrate --no-interaction && ./bin/console cache:clear'"
+    # Remove duplicated availabilities/rates
+    - ssh -i ~/.ssh/id_rsa_deployer rundeck@ie1-pp-cmh-01.sbxtest.net "docker exec -t -u www-data cmhub_cmhub_1 /bin/bash -c 'cd /app/ && ./bin/console cmhub:duplication:remove'"
+  tags:
+    - shell
+
+deploy-prod:
+  stage: Deployment-Prod
+  allow_failure: false
+  environment:
+    name: aws-genesis-prod
+    url: http://cmhub.smartbox.com
+    #  when: on_success
+  when: manual
+  only:
+    - tags
+  before_script:
+    - echo "Tagging image and Deploying for PROJECT ENVIRONMENT"
+  script:
+    - docker tag ${CURRENT_IMAGE} ${CMHUB_DEV_IMAGE}
+    - docker push ${CMHUB_DEV_IMAGE}
+    # Pull latest file from Vault
+    - ssh -i ~/.ssh/id_rsa_deployer rundeck@10.100.132.181 "/opt/sbx/cmhub/pull.rb -g -a prod"
+    - ssh -i ~/.ssh/id_rsa_deployer rundeck@10.100.131.242 "/opt/sbx/cmhub/pull.rb -g -a prod"
+    # Pulling
+    - ssh -i ~/.ssh/id_rsa_deployer rundeck@10.100.132.181  "docker pull ${CMHUB_DEV_IMAGE}"
+    - ssh -i ~/.ssh/id_rsa_deployer rundeck@10.100.131.242  "docker pull ${CMHUB_DEV_IMAGE}"
+    # Do migrations
+    - ssh -i ~/.ssh/id_rsa_deployer rundeck@10.100.131.242 "docker run --rm -u www-data -v /opt/sbx/cmhub/.env:/app/.env:ro ${CMHUB_DEV_IMAGE} /bin/bash -c 'cd /app/ && ./bin/console doctrine:migrations:migrate --no-interaction '"
+    # Stop and Up containers
+    - ssh -i ~/.ssh/id_rsa_deployer rundeck@10.100.132.181  "${DOCKER_COMPOSE_CMD} stop; ${DOCKER_COMPOSE_CMD} up -d"
+    - ssh -i ~/.ssh/id_rsa_deployer rundeck@10.100.131.242  "${DOCKER_COMPOSE_CMD} stop; ${DOCKER_COMPOSE_CMD} up -d"
+    # Others
+    - ssh -i ~/.ssh/id_rsa_deployer rundeck@10.100.131.242 "docker exec -t -u www-data cmhub_cmhub_1 /bin/bash -c 'cd /app/ && ./composer.phar dump-env prod'"
+    - ssh -i ~/.ssh/id_rsa_deployer rundeck@10.100.132.181 "docker exec -t -u www-data cmhub_cmhub_1 /bin/bash -c 'cd /app/ && ./composer.phar dump-env prod'"
+    # Remove duplicated availabilities/rates
+    - ssh -i ~/.ssh/id_rsa_deployer rundeck@10.100.132.181 "docker exec -t -u www-data cmhub_cmhub_1 /bin/bash -c 'cd /app/ && ./bin/console cmhub:duplication:remove'"
+    # NewRelic deployment notification
+    - ssh -i ~/.ssh/id_rsa_deployer rundeck@10.100.132.181 "docker exec -t -u www-data cmhub_cmhub_1 /bin/bash -c 'cd /app/ && ./bin/console newrelic:notify-deployment --user=${GITLAB_USER_EMAIL} --revision=${CI_COMMIT_REF_NAME}'"
+
+  tags:
+    - shell
+
+CMHUB-api-tests-devint:
+  stage: API-Tests-Devint
+  image: ${CURRENT_IMAGE}
+  allow_failure: true
+  dependencies:
+    - build-composer
+  only:
+    - develop
+    - tags
+  script:
+    - mkdir -p ${CI_PROJECT_DIR}/cmhub/DEVINT/
+    - newman run tests/PostmanScripts/CMHUB_APIs-Automation.postman_collection.json -e tests/PostmanScripts/DEVINT.postman_environment.json --folder SBX\ API\ -\ OTA\ 2007B --folder SmartHotel\ -\ OTA\ 2016A --folder Siteminder\ -\ OTA\ 2007B --folder Availpro\ -\ XML\ API --folder EAI\ Data\ flows --folder Travelclick\ -\ OTA\ 2015A --folder Wubook\ -\ JSON\ API --folder BB8\ -\ JSON\ API --folder SBX\ API\ -\ Integration --folder Experience\ API --folder R2D2\ API\ Integration -r htmlextra --reporter-htmlextra-export=${CI_PROJECT_DIR}/cmhub/DEVINT/newman-report.html
+  tags:
+    - k8s
+  artifacts:
+    when: always
+    paths:
+      - ${CI_PROJECT_DIR}/cmhub/DEVINT/newman-report.html
+
+CMHUB-api-tests-preprod:
+  stage: API-Tests-Preprod
+  image: ${CURRENT_IMAGE}
+  allow_failure: true
+  dependencies:
+    - build-composer
+  only:
+    - tags
+  script:
+    - mkdir -p ${CI_PROJECT_DIR}/cmhub/PREPROD/
+    - newman run tests/PostmanScripts/CMHUB_APIs-Automation.postman_collection.json -e tests/PostmanScripts/PREPROD.postman_environment.json --folder SBX\ API\ -\ OTA\ 2007B --folder SmartHotel\ -\ OTA\ 2016A --folder Siteminder\ -\ OTA\ 2007B --folder Availpro\ -\ XML\ API --folder EAI\ Data\ flows --folder Travelclick\ -\ OTA\ 2015A --folder Wubook\ -\ JSON\ API --folder SBX\ API\ -\ Integration --folder Experience\ API --folder R2D2\ API\ Integration -r htmlextra --reporter-htmlextra-export=${CI_PROJECT_DIR}/cmhub/PREPROD/newman-report.html
+  tags:
+    - k8s
+  artifacts:
+    when: always
+    paths:
+      - ${CI_PROJECT_DIR}/cmhub/PREPROD/newman-report.html
+
+iResa-api-tests-devint:
+  stage: API-Tests-Devint
+  allow_failure: true
+  image: ${CURRENT_IMAGE}
+  dependencies:
+    - build-composer
+  only:
+    - develop
+    - tags
+  script:
+    - mkdir -p ${CI_PROJECT_DIR}/iResa/DEVINT/
+    - newman run tests/PostmanScripts/CMHUB_APIs-Automation.postman_collection.json -e tests/PostmanScripts/DEVINT.postman_environment.json --folder iResa\ API -r htmlextra --reporter-htmlextra-export=${CI_PROJECT_DIR}/iResa/DEVINT/newman-report.html
+  tags:
+    - k8s
+  artifacts:
+    when: always
+    paths:
+      - ${CI_PROJECT_DIR}/iResa/DEVINT/newman-report.html
+
+iResa-api-tests-preprod:
+  stage: API-Tests-Preprod
+  allow_failure: true
+  image: ${CURRENT_IMAGE}
+  dependencies:
+    - build-composer
+  only:
+    - tags
+  script:
+    - mkdir -p ${CI_PROJECT_DIR}/iResa/PREPROD/
+    - newman run tests/PostmanScripts/CMHUB_APIs-Automation.postman_collection.json -e tests/PostmanScripts/PREPROD.postman_environment.json --folder iResa\ API  -r htmlextra --reporter-htmlextra-export=${CI_PROJECT_DIR}/iResa/PREPROD/newman-report.html
+  tags:
+    - k8s
+  artifacts:
+    when: always
+    paths:
+      - ${CI_PROJECT_DIR}/iResa/PREPROD/newman-report.html
+
+EAI-api-tests-devint:
+  stage: API-Tests-Devint
+  image: ${CURRENT_IMAGE}
+  allow_failure: true
+  dependencies:
+    - build-composer
+  only:
+    - develop
+    - tags
+  script:
+    - mkdir -p ${CI_PROJECT_DIR}/EAI/DEVINT/
+    - newman run tests/PostmanScripts/CMHUB_APIs-Automation.postman_collection.json -e tests/PostmanScripts/DEVINT.postman_environment.json --folder EAI\ Data\ flows  -r htmlextra --reporter-htmlextra-export=${CI_PROJECT_DIR}/EAI/DEVINT/newman-report.html
+  tags:
+    - k8s
+  artifacts:
+    when: always
+    paths:
+      - ${CI_PROJECT_DIR}/EAI/DEVINT/newman-report.html
+
+EAI-api-tests-preprod:
+  stage: API-Tests-Preprod
+  image: ${CURRENT_IMAGE}
+  allow_failure: true
+  dependencies:
+    - build-composer
+  only:
+    - tags
+  script:
+    - mkdir -p ${CI_PROJECT_DIR}/EAI/PREPROD/
+    - newman run tests/PostmanScripts/CMHUB_APIs-Automation.postman_collection.json -e tests/PostmanScripts/PREPROD.postman_environment.json --folder EAI\ Data\ flows  -r htmlextra --reporter-htmlextra-export=${CI_PROJECT_DIR}/EAI/PREPROD/newman-report.html
+  tags:
+    - k8s
+  artifacts:
+    when: always
+    paths:
+      - ${CI_PROJECT_DIR}/EAI/PREPROD/newman-report.html
+
+CMHUB-performance-tests-devint:
+  stage: Performance-Tests-Devint
+  image:
+    name: justb4/jmeter:latest
+  allow_failure: true
+  script:
+    - mkdir -p ${CI_PROJECT_DIR}/performance/Reports/DEVINT/cmhub/loadtests/
+    - jmeter -n -t ${CI_PROJECT_DIR}/performance/CMHUBAPILoadtesting_DEVINT.jmx -Jthreads=100 -Jrampup=10 -Jduration=60 -f -l ${CI_PROJECT_DIR}/performance/Reports/CMHUBAPILoadtestingDevint-results.jtl -e -o ${CI_PROJECT_DIR}/performance/Reports/DEVINT/cmhub/loadtests/
+  only:
+    - develop
+    - tags
+  tags:
+    - k8s
+  artifacts:
+    when: always
+    paths:
+      - ${CI_PROJECT_DIR}/performance/Reports/DEVINT/cmhub/loadtests/
+
+CMHUB-performance-tests-preprod:
+  stage: Performance-Tests-Preprod
+  image:
+    name: justb4/jmeter:latest
+  allow_failure: false
+  script:
+    - mkdir -p ${CI_PROJECT_DIR}/performance/Reports/PREPROD/cmhub/loadtests/
+    - jmeter -n -t ${CI_PROJECT_DIR}/performance/CMHUBAPILoadtesting_PREPROD.jmx -Jthreads=100 -Jrampup=10 -Jduration=60 -f -l ${CI_PROJECT_DIR}/performance/Reports/CMHUBAPILoadtestingPreprod-results.jtl -e -o ${CI_PROJECT_DIR}/performance/Reports/PREPROD/cmhub/loadtests/
+  only:
+    - tags
+  tags:
+    - k8s
+  artifacts:
+    when: always
+    paths:
+      - ${CI_PROJECT_DIR}/performance/Reports/PREPROD/cmhub/loadtests/
+
+
+execute-command DevInt:
+  stage: Deployment-DevInt
+  image: ${CURRENT_IMAGE}
+  when: manual
+  script:
+    - ssh -i ~/.ssh/id_rsa_deployer rundeck@ie1-t-u3cmh-01.sbxtest.net "docker exec -t -u www-data cmhub_cmhub_1 /bin/bash -c 'cd /app/ && ./bin/console $CI_COMMAND'"
+  tags:
+    - shell
+  only:
+    - develop
+
+execute-command PreProd:
+  stage: Deployment-Preprod
+  image: ${CURRENT_IMAGE}
+  when: manual
+  script:
+    - ssh -i ~/.ssh/id_rsa_deployer rundeck@ie1-pp-cmh-01.sbxtest.net "docker exec -t -u www-data cmhub_cmhub_1 /bin/bash -c 'cd /app/ && ./bin/console $CI_COMMAND'"
+  tags:
+    - shell
+  only:
+    - tags
+
+execute-command Production:
+  stage: Deployment-Prod
+  image: ${CURRENT_IMAGE}
+  when: manual
+  script:
+    - ssh -i ~/.ssh/id_rsa_deployer rundeck@10.100.132.181 "docker exec -t -u www-data cmhub_cmhub_1 /bin/bash -c 'cd /app/ && ./bin/console $CI_COMMAND'"
+  tags:
+    - shell
+  only:
+    - tags
+
+execute-command cmhstable:
+  stage: Deployment-Prod
+  image: ${CURRENT_IMAGE}
+  when: manual
+  script:
+    - ssh -i ~/.ssh/id_rsa_deployer rundeck@ie1-te-cmhst-01.sbxtest.net "docker exec -t -u www-data cmhub_cmhub_1 /bin/bash -c 'cd /app/ && ./bin/console $CI_COMMAND'"
+  tags:
+    - shell
+  only:
+    - tags
+
+pages:
+  stage: publish
+  tags:
+    - k8s
+  dependencies:
+    - phpspec
+    - CMHUB-api-tests-devint
+    - EAI-api-tests-devint
+    - iResa-api-tests-devint
+    - CMHUB-api-tests-preprod
+    - EAI-api-tests-preprod
+    - iResa-api-tests-preprod
+    - CMHUB-performance-tests-devint
+    - CMHUB-performance-tests-preprod
+  allow_failure: true
+  script:
+    - rm -rf public/
+    - mkdir -p public
+    - mkdir -p public/cmhub/
+    - mkdir -p public/iResa/
+    - mkdir -p public/EAI/
+    - mkdir -p public/DEVINT/cmhub/
+    - mkdir -p public/DEVINT/EAI/
+    - mkdir -p public/DEVINT/iResa/
+    - mkdir -p public/PREPROD/cmhub/
+    - mkdir -p public/PREPROD/EAI/
+    - mkdir -p public/PREPROD/iResa/
+    - mv coverage public/
+    - mv ${CI_PROJECT_DIR}/cmhub/DEVINT/ public/cmhub/
+    - mv ${CI_PROJECT_DIR}/iResa/DEVINT/ public/iResa/
+    - mv ${CI_PROJECT_DIR}/EAI/DEVINT/ public/EAI/
+    - mv ${CI_PROJECT_DIR}/performance/Reports/DEVINT/cmhub/loadtests/ public/DEVINT/cmhub/
+    - mv ${CI_PROJECT_DIR}/performance/Reports/DEVINT/EAI/loadtests/ public/DEVINT/EAI/
+    - mv ${CI_PROJECT_DIR}/performance/Reports/DEVINT/iResa/loadtests/ public/DEVINT/iResa/
+    - mv ${CI_PROJECT_DIR}/cmhub/PREPROD/ public/cmhub/
+    - mv ${CI_PROJECT_DIR}/iResa/PREPROD/ public/iResa/
+    - mv ${CI_PROJECT_DIR}/EAI/PREPROD/ public/EAI/
+    - mv ${CI_PROJECT_DIR}/performance/Reports/PREPROD/cmhub/loadtests/ public/PREPROD/cmhub/
+    - mv ${CI_PROJECT_DIR}/performance/Reports/PREPROD/EAI/loadtests/ public/PREPROD/EAI/
+    - mv ${CI_PROJECT_DIR}/performance/Reports/PREPROD/iResa/loadtests/ public/PREPROD/iResa/
+  only:
+    - tags
+  artifacts:
+    paths:
+      - public

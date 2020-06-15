@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<ruleset name="Smartbox Jarvis PHPMD ruleset"
+         xmlns="http://pmd.sf.net/ruleset/1.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd"
+         xsi:noNamespaceSchemaLocation="http://pmd.sf.net/ruleset_xml_schema.xsd">
+
+    <rule ref="rulesets/codesize.xml">
+        <!--Normalizers should be split into unique object, meanwhile disable Complexity rules-->
+        <exclude name="CyclomaticComplexity"/>
+        <exclude name="NPathComplexity"/>
+    </rule>
+
+    <rule ref="rulesets/design.xml">
+        <exclude name="CouplingBetweenObjects"/>
+        <exclude name="NumberOfChildren"/>
+    </rule>
+
+    <rule ref="rulesets/controversial.xml"/>
+
+    <rule ref="rulesets/unusedcode.xml">
+        <exclude name="UnusedFormalParameter"/>
+    </rule>
+
+    <rule ref="rulesets/naming.xml">
+        <exclude name="ShortVariable"/>
+        <exclude name="LongVariable"/>
+    </rule>
+
+
+    <rule ref="rulesets/cleancode.xml">
+        <exclude name="StaticAccess"/>
+    </rule>
+
+    <rule ref="rulesets/naming.xml/ShortVariable"
+          since="0.2"
+          message="Avoid variables with short names like {0}. Configured minimum length is {1}."
+          class="PHPMD\Rule\Naming\ShortVariable"
+          externalInfoUrl="http://phpmd.org/rules/naming.html#shortvariable">
+        <priority>3</priority>
+        <properties>
+            <property name="minimum" description="Minimum length for a variable, property or parameter name" value="3"/>
+            <property name="exceptions" value="id"/>
+        </properties>
+    </rule>
+
+    <rule ref="rulesets/design.xml/CouplingBetweenObjects">
+        <properties>
+            <property name="minimum" value="25" description="Maximum number of acceptable dependencies."/>
+        </properties>
+    </rule>
+
+    <rule ref="rulesets/design.xml/NumberOfChildren"
+          since="0.2"
+          message = "The {0} {1} has {2} children. Consider to rebalance this class hierarchy to keep number of children under {3}."
+          class="PHPMD\Rule\Design\NumberOfChildren"
+          externalInfoUrl="https://phpmd.org/rules/design.html#numberofchildren">
+        <description>
+            <![CDATA[
+            A class with an excessive number of children is an indicator for an unbalanced
+            class hierarchy. You should consider to refactor this class hierarchy.
+            ]]>
+        </description>
+        <priority>3</priority>
+        <properties>
+            <property name="minimum" value="20" description="Maximum number of acceptable child classes." />
+        </properties>
+        <example />
+    </rule>
+
+    <exclude-pattern>.*/Tests/*</exclude-pattern>
+    <exclude-pattern>.*/Entity/*</exclude-pattern>
+</ruleset>

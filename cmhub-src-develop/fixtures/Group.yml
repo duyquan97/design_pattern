@@ -1,0 +1,4 @@
+App\Application\Sonata\UserBundle\Entity\Group:
+    agents_group:
+        __construct: ['Agents']
+        roles: [ROLE_APP_ADMIN_PRODUCT_EDIT, ROLE_APP_ADMIN_PRODUCT_LIST, ROLE_APP_ADMIN_PRODUCT_VIEW, ROLE_APP_ADMIN_PRODUCT_EXPORT, ROLE_USER]

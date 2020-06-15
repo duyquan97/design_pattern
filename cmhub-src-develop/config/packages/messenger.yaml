@@ -1,0 +1,127 @@
+framework:
+    messenger:
+        failure_transport: failed
+        transports:
+            default:
+                dsn: "%env(MESSENGER_TRANSPORT_DSN)%"
+                options:
+                    queue_name: default
+                    auto_setup: false
+                retry_strategy:
+                    max_retries: 5
+                    # milliseconds delay
+                    delay: 180000 # 3 minutes
+                    # causes the delay to be higher before each retry
+                    # e.g. 3 min delay, 6 minutes, 18 minutes, etc
+                    multiplier: 2
+                    max_delay: 0
+                    # override all of this with a service that
+                    # implements Symfony\Component\Messenger\Retry\RetryStrategyInterface
+                    # service: null
+
+            availability:
+                dsn: "%env(MESSENGER_TRANSPORT_DSN)%"
+                options:
+                    queue_name: availability
+                    auto_setup: false
+                    table_name: availability_messages
+                retry_strategy:
+                    max_retries: 5
+                    # milliseconds delay
+                    delay: 180000 # 3 minutes
+                    # causes the delay to be higher before each retry
+                    # e.g. 3 min delay, 6 minutes, 18 minutes, etc
+                    multiplier: 2
+                    max_delay: 0
+                    # override all of this with a service that
+                    # implements Symfony\Component\Messenger\Retry\RetryStrategyInterface
+                    # service: null
+
+            rate:
+                dsn: "%env(MESSENGER_TRANSPORT_DSN)%"
+                options:
+                    queue_name: rates
+                    auto_setup: false
+                    table_name: rate_messages
+                retry_strategy:
+                    max_retries: 5
+                    # milliseconds delay
+                    delay: 180000 # 3 minutes
+                    # causes the delay to be higher before each retry
+                    # e.g. 3 min delay, 6 minutes, 18 minutes, etc
+                    multiplier: 2
+                    max_delay: 0
+                    # override all of this with a service that
+                    # implements Symfony\Component\Messenger\Retry\RetryStrategyInterface
+                    # service: null
+
+            booking:
+                dsn: "%env(MESSENGER_TRANSPORT_DSN)%"
+                options:
+                    queue_name: bookings
+                    auto_setup: false
+                    table_name: booking_messages
+                retry_strategy:
+                    max_retries: 5
+                    # milliseconds delay
+                    delay: 180000 # 3 minutes
+                    # causes the delay to be higher before each retry
+                    # e.g. 3 min delay, 6 minutes, 18 minutes, etc
+                    multiplier: 2
+                    max_delay: 0
+                    # override all of this with a service that
+                    # implements Symfony\Component\Messenger\Retry\RetryStrategyInterface
+                    # service: null
+
+            transaction:
+                dsn: "%env(MESSENGER_TRANSPORT_DSN)%"
+                options:
+                    queue_name: transactions
+                    auto_setup: false
+                    table_name: transaction_messages
+                retry_strategy:
+                    max_retries: 5
+                    # milliseconds delay
+                    delay: 180000 # 3 minutes
+                    # causes the delay to be higher before each retry
+                    # e.g. 3 min delay, 6 minutes, 18 minutes, etc
+                    multiplier: 2
+                    max_delay: 0
+                    # override all of this with a service that
+                    # implements Symfony\Component\Messenger\Retry\RetryStrategyInterface
+                    # service: null
+
+            data_alignment:
+                dsn: "%env(MESSENGER_TRANSPORT_DSN)%"
+                options:
+                    queue_name: data_alignment
+                    auto_setup: false
+                    table_name: data_alignment_messages
+                retry_strategy:
+                    max_retries: 5
+                    # milliseconds delay
+                    delay: 180000 # 3 minutes
+                    # causes the delay to be higher before each retry
+                    # e.g. 3 min delay, 6 minutes, 18 minutes, etc
+                    multiplier: 2
+                    max_delay: 0
+                    # override all of this with a service that
+                    # implements Symfony\Component\Messenger\Retry\RetryStrategyInterface
+                    # service: null
+
+            failed: 'doctrine://default?queue_name=failed&table_name=failed_messages'
+
+        routing:
+             'App\Message\ImportDataFileUploaded': default
+             'App\Message\ProductPartnerUpdated': default
+             'App\Message\TransactionScheduled': transaction
+             'App\Message\BookingCreated': booking
+             'App\Message\BookingReceived': booking
+             'App\Message\PartnerChannelManagerUpdated': default
+             'App\Message\SendBookingToChannel': booking
+             'App\Message\AvailabilityUpdated': availability
+             'App\Message\RateUpdated': rate
+             'App\Message\SyncData': data_alignment
+             'App\Message\MasterProductUpdated': default
+             'App\Message\PartnerUpdated': default
+             'App\Message\PullRoom': default

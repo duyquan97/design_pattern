@@ -1,0 +1,101 @@
+App\Entity\BookingProduct:
+    bookingProduct1:
+        totalAmount: 100
+        currency: EUR
+        product: '@product1'
+        booking: '@booking1'
+    bookingProduct2:
+        totalAmount: 300
+        currency: EUR
+        product: '@product2'
+        booking: '@booking2'
+    bookingProduct3:
+        totalAmount: 50
+        currency: EUR
+        product: '@product3'
+        booking: '@booking3'
+    bookingProduct4:
+        totalAmount: 800
+        currency: EUR
+        product: '@product4'
+        booking: '@booking4'
+    bookingProduct5:
+        totalAmount: 100
+        currency: EUR
+        product: '@product5'
+        booking: '@booking5'
+    bookingProduct6:
+        totalAmount: 2000
+        currency: EUR
+        product: '@product6'
+        booking: '@booking6'
+    bookingProduct7:
+        totalAmount: 60
+        currency: EUR
+        product: '@product7'
+        booking: '@booking7'
+    bookingProduct8:
+        totalAmount: 1200
+        currency: EUR
+        product: '@product8'
+        booking: '@booking8'
+    bookingProduct9:
+        totalAmount: 70
+        currency: EUR
+        product: '@product9'
+        booking: '@booking9'
+    bookingProduct10:
+        totalAmount: 200
+        currency: EUR
+        product: '@product10'
+        booking: '@booking10'
+    bookingProduct11:
+        totalAmount: 60
+        currency: EUR
+        product: '@product11'
+        booking: '@booking11'
+    bookingProduct12:
+        totalAmount: 120
+        currency: EUR
+        product: '@product12'
+        booking: '@booking12'
+    bookingProduct13:
+        totalAmount: 70
+        currency: EUR
+        product: '@product13'
+        booking: '@booking13'
+    bookingProduct14:
+        totalAmount: 200
+        currency: EUR
+        product: '@product14'
+        booking: '@booking14'
+    bookingProduct15:
+        totalAmount: 70
+        currency: EUR
+        product: '@product15'
+        booking: '@booking15'
+    bookingProduct16:
+        totalAmount: 200
+        currency: EUR
+        product: '@product16'
+        booking: '@booking16'
+    bookingProduct17:
+        totalAmount: 70
+        currency: EUR
+        product: '@product17'
+        booking: '@booking17'
+    bookingProduct18:
+        totalAmount: 200
+        currency: EUR
+        product: '@product18'
+        booking: '@booking18'
+    bookingProduct19:
+        totalAmount: 70
+        currency: EUR
+        product: '@product19'
+        booking: '@booking19'
+    bookingProduct20:
+        totalAmount: 200
+        currency: EUR
+        product: '@product20'
+        booking: '@booking20'

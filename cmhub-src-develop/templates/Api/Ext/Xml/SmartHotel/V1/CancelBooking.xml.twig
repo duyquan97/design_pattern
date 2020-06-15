@@ -1,0 +1,15 @@
+{% apply spaceless %}
+<?xml version="1.0" encoding="UTF-8"?>
+<OTA_CancelRQ PrimaryLangID="eng" Target="Production" TimeStamp="{{ 'now' | date('Y-m-d\TH:i:s.v\Z') }}" Version="1.0">
+    <POS>
+        <Source AgentDutyCode="SMA">
+            <RequestorID ID="{{ apiKey }}" MessagePassword="{{ apiPassword }}"></RequestorID>
+        </Source>
+    </POS>
+    <UniqueID ID="{{ booking.identifier }}" ID_Context="2" Type="15">
+        <TPA_Extensions>
+            <HotelInfo HotelCode="{{ booking.partner.identifier }}"/>
+        </TPA_Extensions>
+    </UniqueID>
+</OTA_CancelRQ>
+{% endapply %}

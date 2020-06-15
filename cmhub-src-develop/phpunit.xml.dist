@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- https://phpunit.de/manual/current/en/appendixes.configuration.html -->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.8/phpunit.xsd"
+         backupGlobals="false"
+         colors="true"
+         bootstrap="vendor/autoload.php"
+         stderr="true"
+>
+    <php>
+        <ini name="error_reporting" value="-1" />
+        <ini name="memory_limit" value="-1"/>
+        <server name="KERNEL_CLASS" value="App\Kernel" />
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="weak" />
+        <env name="DATABASE_URL" value="mysql://root:root@db:3306/cmhub_test" />
+        <env name="APP_ENV" value="test" />
+        <env name="APP_SECRET" value="test.12HASG3" />
+        <env name="BOOKING_ENGINE_CLASS" value="App\Service\EAI\EAIBookingEngine" />
+
+        <!-- ###+ ekino/newrelic-bundle ### -->
+        <!-- Get the REST API key of your NewRelic Account on https://docs.newrelic.com/docs/apis/rest-api-v2/requirements/api-keys. Using an API key is optional. -->
+        <env name="NEWRELIC_API_KEY" value="FIXME"/>
+        <env name="NEWRELIC_DEPLOY_NAME" value="TheTest"/>
+
+        <!-- ###- ekino/newrelic-bundle ### -->
+
+        <!-- ###+ symfony/messenger ### -->
+        <!-- Choose one of the transports below -->
+        <!-- MESSENGER_TRANSPORT_DSN=amqp://guest:guest@localhost:5672/%2f/messages -->
+        <env name="MESSENGER_TRANSPORT_DSN" value="in-memory:///" />
+        <!-- MESSENGER_TRANSPORT_DSN=redis://localhost:6379/messages -->
+        <!-- ###- symfony/messenger ### -->
+    </php>
+
+    <testsuites>
+        <testsuite name="Project Test Suite">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory>src</directory>
+            <exclude>
+                <directory>src/*Bundle/Resources</directory>
+                <directory>src/*/*Bundle/Resources</directory>
+                <directory>src/*/Bundle/*Bundle/Resources</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+</phpunit>

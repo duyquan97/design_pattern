@@ -1,0 +1,7 @@
+smartbox_correlation_id:
+    request_header: Correlation-Id
+    response_header: Correlation-Id
+    monolog_processor_enabled: true
+    event_listener_enabled: false
+    api_request_enabled: false
+    monolog_processor_channel: app

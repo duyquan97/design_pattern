@@ -1,0 +1,18 @@
+# Read the documentation: https://symfony.com/doc/master/bundles/FOSRestBundle/index.html
+fos_rest:
+    routing_loader:
+        default_format: xml
+    format_listener:
+        rules:
+            - { path: '^/api/ext/xml/availpro', priorities: ['text/xml'], fallback_format: xml, prefer_extension: false }
+            - { path: '^/api/ext/soap', priorities: ['text/xml; charset=utf-8'], fallback_format: xml, prefer_extension: false }
+            - { path: '^/api/int/rest', priorities: ['json'], fallback_format: json, prefer_extension: false }
+            - { path: '^/api/wubook', priorities: ['json'], fallback_format: json, prefer_extension: false }
+            - { path: '^/api/external', priorities: ['json'], fallback_format: json, prefer_extension: false }
+            - { path: '^/r2d2/', priorities: ['json'], fallback_format: json, prefer_extension: true }
+            - { path: '^/booking', priorities: ['json'], fallback_format: json, prefer_extension: true }
+            - { path: '^/', priorities: ['text/html', '*/*'], fallback_format: html, prefer_extension: false }
+    view:
+        mime_types:
+            xml: ['text/xml; charset=UTF-8', 'application/xml']
+        view_response_listener: 'force'

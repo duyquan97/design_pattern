@@ -1,0 +1,52 @@
+{% apply spaceless %}
+<?xml version="1.0" encoding="utf-8" ?>
+<message xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <success />
+    {% for identifier, bookings in bookingsAllPartner %}
+        <bookings hotelId="{{ identifier }}">
+        {% for booking in bookings %}
+            <booking id="{{ booking.reservationId }}" action="{{ booking.status == 'Commit' ? 'Create' : 'Cancel' }}" currency="{{ booking.currency }}" date="{{ booking.createdAt.format('Y-m-d\\TH:i:s') }}" totalAmount="{{ booking.totalAmount }}" paidAmount="{{ booking.totalAmount }}" dueAmount="0" payableAmount="0" paxCount="{{ booking.getTotalGuests }}">
+                {% for guest in booking.getFirstBooking().guests %}
+                    {% if guest.isMain %}
+                        <customer firstName="{{ guest.name }}" lastName="{{ guest.surname }}">
+                            <contact email="{{ guest.email }}" phone="{{ guest.phone }}">
+                                <address city="{{ guest.city }}" country="{{ guest.countryCode }}" postalCode="{{ guest.postalCode }}">
+                                    <![CDATA[{{ guest.address }}]]>
+                                </address>
+                            </contact>
+                            <comment>
+                                {% if booking.requests %}
+                                <![CDATA[{{ booking.requests }}]]>
+                                {% endif %}
+                                <![CDATA[{{ booking.comments }}]]>
+                            </comment>
+                        </customer>
+                    {% endif %}
+                {% endfor %}
+                <distributor>
+                    <comment name="Comments">
+                        <![CDATA[{{ booking.comments }}]]>
+                    </comment>
+                </distributor>
+                <rooms>
+                    {% for room in booking.bookingProducts %}
+                        <room id="{{ room.getProduct.identifier }}">
+                            <stays>
+                                {% for rate in room.rates %}
+                                    <stay date="{{ rate.start.format('Y-m-d') }}" quantity="1" unitPrice="{{ rate.amount }}" rateCode="{{ ratePlan }}" />
+                                {% endfor %}
+                            </stays>
+                            <guests>
+                                {% for guest in room.guests %}
+                                    <guest firstName="{{ guest.name }}" lastName="{{ guest.surname }}" />
+                                {% endfor %}
+                            </guests>
+                        </room>
+                    {% endfor %}
+                </rooms>
+            </booking>
+        {% endfor %}
+        </bookings>
+    {% endfor %}
+</message>
+{% endapply %}

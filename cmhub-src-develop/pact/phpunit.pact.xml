@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="../vendor/autoload.php">
+    <testsuites>
+        <testsuite name="PhpPact Consumer Contract tests">
+            <directory>./tests</directory>
+        </testsuite>
+    </testsuites>
+    <listeners>
+        <listener class="PhpPact\Consumer\Listener\PactTestListener">
+            <arguments>
+                <array>
+                    <element key="0">
+                        <string>PhpPact Consumer Contract tests</string>
+                    </element>
+                </array>
+            </arguments>
+        </listener>
+    </listeners>
+    <php>
+        <env name="PACT_MOCK_SERVER_HOST" value="localhost"/>
+        <env name="PACT_MOCK_SERVER_PORT" value="7200"/>
+        <env name="PACT_CONSUMER_NAME" value="CMHUB"/>
+        <env name="PACT_CONSUMER_VERSION" value="3.1.0"/>
+        <env name="PACT_CONSUMER_TAG" value="master"/>
+        <env name="PACT_PROVIDER_NAME" value="BB8-API"/>
+        <env name="PACT_OUTPUT_DIR" value="./pact/pacts/"/>
+        <env name="PACT_MOCK_SERVER_HEALTH_CHECK_TIMEOUT" value="10"/>
+        <env name="PACT_LOG" value="./var/log/pact.log"/>
+       <!-- <env name="PACT_BROKER_URI" value="http://10.10.0.234:32584"/> Use this attribute only when run locally -->
+        <env name="PACT_CONTRACT" value="pacts/$PACT_CONSUMER-$PACT_PROVIDER.json"/>
+    </php>
+
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./src/pact</directory>
+        </whitelist>
+    </filter>
+</phpunit>

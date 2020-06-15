@@ -1,0 +1,178 @@
+{% spaceless %}
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+
+    <SOAP-ENV:Header xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+        <wsse:Security soap:mustUnderstand="1" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+            <wsse:UsernameToken>
+                <wsse:Username>{{ username }}</wsse:Username>
+                <wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText">{{ password }}</wsse:Password>
+            </wsse:UsernameToken>
+        </wsse:Security>
+    </SOAP-ENV:Header>
+
+    <SOAP-ENV:Body xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+        <OTA_HotelResNotifRQ xmlns="http://www.opentravel.org/OTA/2003/05" EchoToken="{{ echoToken }}" Version="1.0" ResStatus="Commit" TimeStamp="{{ 'now' | date('c') }}">
+            <POS>
+                <Source>
+                    <RequestorID Type="22" ID="SBX"/>
+                    <BookingChannel Primary="true">
+                        <CompanyName Code="SMA">Smartbox</CompanyName>
+                    </BookingChannel>
+                </Source>
+            </POS>
+
+            <HotelReservations>
+                <HotelReservation CreateDateTime="{{ booking.createdAt | date("c") }}">
+                    <UniqueID Type="14" ID="{{ booking.identifier }}"/>
+                    <RoomStays>
+                        {% for bookingProduct in booking.bookingProducts %}
+                            <RoomStay>
+                                <RoomTypes>
+                                    <RoomType RoomTypeCode="{{ bookingProduct.product.identifier }}">
+                                        <RoomDescription Name="{{ bookingProduct.product.name }}">{{ bookingProduct.product.description }}</RoomDescription>
+                                    </RoomType>
+                                </RoomTypes>
+                                <RoomRates>
+                                    <RoomRate RoomTypeCode="{{ bookingProduct.product.identifier }}" RatePlanCode="{{ ratePlan }}" NumberOfUnits="1">
+                                        <Rates>
+                                            {% for rate in bookingProduct.rates %}
+                                                <Rate UnitMultiplier="1" RateTimeUnit="Day" EffectiveDate="{{ rate.date | date("Y-m-d", false) }}"
+                                                      ExpireDate="{{ rate.date | date_modify("+1 day") | date("Y-m-d", false) }}" >
+                                                    <Base AmountAfterTax="{{ (rate.amount) | number_format(2, '.', '') }}"
+                                                          CurrencyCode="{{ booking.partner.currency }}">
+                                                    </Base>
+                                                </Rate>
+                                            {% endfor %}
+                                        </Rates>
+                                    </RoomRate>
+                                </RoomRates>
+                                <GuestCounts>
+                                    <GuestCount AgeQualifyingCode="10" Count="{{ bookingProduct.guests|length }}"/>
+                                </GuestCounts>
+                                <TimeSpan Start="{{ booking.startDate | date("Y-m-d", false) }}"
+                                          End="{{ booking.endDate | date("Y-m-d", false) }}"/>
+                                <BasicPropertyInfo HotelCode="{{ booking.partner.identifier }}"
+                                                   HotelName="{{ booking.partner.name }}"/>
+                                {% if booking.requests|length > 0 %}
+                                    <SpecialRequests>
+                                        {% for request in booking.requests %}
+                                            <SpecialRequest>
+                                                <Text>{{ request }}</Text>
+                                            </SpecialRequest>
+                                        {% endfor %}
+                                    </SpecialRequests>
+                                {% endif %}
+                                <Total AmountAfterTax="{{ (booking.totalAmount) | number_format(2, '.', '') }}"
+                                       CurrencyCode="{{ booking.partner.currency }}">
+                                </Total>
+                                <ResGuestRPHs>
+                                    {% set count = bookingProduct.guests|length %}
+                                    {% for guest in bookingProduct.guests %}
+                                    <ResGuestRPH RPH="{{ (loop.parent.loop.index - 1) * count + loop.index }}"/>
+                                    {% endfor %}
+                                </ResGuestRPHs>
+                                    <Comments>
+                                        <Comment>
+                                                <Text>{{ booking.comments }}</Text>
+                                        </Comment>
+                                    </Comments>
+                            </RoomStay>
+                        {% endfor %}
+                    </RoomStays>
+                    <ResGuests>
+                        {% for bookingProduct in booking.bookingProducts %}
+                            {% set count = bookingProduct.guests|length %}
+                            {% for guest in bookingProduct.guests %}
+                                <ResGuest ResGuestRPH="{{ (loop.parent.loop.index - 1) * count + loop.index }}" {% if guest.isMain %}PrimaryIndicator="1"{% endif %}>
+                                    <Profiles>
+                                        <ProfileInfo>
+                                            <Profile ProfileType="1">
+                                                <Customer>
+                                                    <PersonName>
+                                                        <GivenName>{{ guest.name }}</GivenName>
+                                                        <Surname>{{ guest.surname }}</Surname>
+                                                    </PersonName>
+                                                    {% if guest.phone is not empty %}
+                                                        <Telephone PhoneNumber="{{ guest.phone }}"/>
+                                                    {% endif %}
+                                                    {% if guest.email is not empty %}
+                                                        <Email>{{ guest.email }}</Email>
+                                                    {% endif %}
+                                                    <Address>
+                                                        {% if guest.address is not empty %}
+                                                            <AddressLine>{{ guest.address }}</AddressLine>
+                                                        {% endif %}
+                                                        {% if guest.city is not empty %}
+                                                            <CityName>{{ guest.city }}</CityName>
+                                                        {% endif %}
+                                                        {% if guest.zipCode is not empty %}
+                                                            <PostalCode>{{ guest.zipCode }}</PostalCode>
+                                                        {% endif %}
+                                                        {% if guest.state is not empty %}
+                                                            <StateProv>{{ guest.state }}</StateProv>
+                                                        {% endif %}
+                                                        {% if guest.country is not empty %}
+                                                            <CountryName>{{ guest.country }}</CountryName>
+                                                        {% endif %}
+                                                    </Address>
+                                                </Customer>
+                                            </Profile>
+                                        </ProfileInfo>
+                                    </Profiles>
+                                </ResGuest>
+                            {% endfor %}
+                        {% endfor %}
+                    </ResGuests>
+                    <ResGlobalInfo>
+                        <HotelReservationIDs>
+                            <HotelReservationID ResID_Type="14" ResID_Value="{{ booking.identifier }}"/>
+                        </HotelReservationIDs>
+                        <Total AmountAfterTax="{{ (booking.totalAmount) | number_format(2, '.', '') }}"
+                               CurrencyCode="{{ booking.partner.currency }}">
+                        </Total>
+                        <Profiles>
+                            <ProfileInfo>
+                                <Profile ProfileType="1">
+                                    {% if customer != false %}
+                                        <Customer>
+                                            <PersonName>
+                                                <GivenName>{{ customer.name }}</GivenName>
+                                                <Surname>{{ customer.surname }}</Surname>
+                                            </PersonName>
+                                            {% if customer.phone is not empty %}
+                                                <Telephone PhoneNumber="{{ customer.phone }}"/>
+                                            {% endif %}
+                                            {% if customer.email is not empty %}
+                                                <Email>{{ customer.email }}</Email>
+                                            {% endif %}
+                                            <Address>
+                                                {% if customer.address is not empty %}
+                                                    <AddressLine>{{ customer.address }}</AddressLine>
+                                                {% endif %}
+                                                {% if customer.city is not empty %}
+                                                    <CityName>{{ customer.city }}</CityName>
+                                                {% endif %}
+                                                {% if customer.zipCode is not empty %}
+                                                    <PostalCode>{{ customer.zipCode }}</PostalCode>
+                                                {% endif %}
+                                                {% if customer.state is not empty %}
+                                                    <StateProv>{{ customer.state }}</StateProv>
+                                                {% endif %}
+                                                {% if customer.country is not empty %}
+                                                    <CountryName>{{ customer.country }}</CountryName>
+                                                {% endif %}
+                                            </Address>
+                                        </Customer>
+                                    {% endif %}
+                                </Profile>
+                            </ProfileInfo>
+                        </Profiles>
+                    </ResGlobalInfo>
+                </HotelReservation>
+            </HotelReservations>
+        </OTA_HotelResNotifRQ>
+    </SOAP-ENV:Body>
+
+</SOAP-ENV:Envelope>
+{% endspaceless %}

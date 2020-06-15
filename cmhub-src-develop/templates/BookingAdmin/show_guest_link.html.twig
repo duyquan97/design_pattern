@@ -1,0 +1,7 @@
+{% extends 'SonataAdminBundle:CRUD:base_show_field.html.twig' %}
+
+{% block field %}
+    {% if object.mainGuest %}
+        <a href="{{ path('admin_app_guest_show', {id: object.mainGuest.id}) }}"> {{ object.mainGuest.id }}</a>
+    {% endif %}
+{% endblock %}

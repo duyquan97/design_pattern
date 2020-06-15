@@ -1,0 +1,8 @@
+{% if admin.hasRoute('upload') %}
+<li>
+    <a class="sonata-action-element" href="{{ path('chaining_file_create') }}">
+        <i class="fa fa-upload" aria-hidden="true"></i>
+        {{ 'Upload chaining file'|trans({}, 'SonataAdminBundle') }}
+    </a>
+</li>
+{% endif %}

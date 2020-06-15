@@ -1,0 +1,9 @@
+api_cm_siteminder_ota_wsdl:
+    path: /api/ext/soap/ota/siteminder
+    defaults: { _controller: App\Controller\SiteminderController::wsdlAction, path: siteminder.wsdl }
+    methods:  [GET]
+
+api_cm_siteminder_ota_server:
+    path: /api/ext/soap/ota/siteminder
+    defaults: { _controller: App\Controller\SiteminderController::serverAction }
+    methods:  [POST]

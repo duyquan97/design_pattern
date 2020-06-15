@@ -1,0 +1,263 @@
+App\Entity\Booking:
+    booking1:
+        identifier: RESA-0009564495
+        partner: '@partner1'
+        createdAt: <(new \DateTime('2019-11-15'))>
+        updatedAt: <(new \DateTime('2019-11-19'))>
+        startDate: <(new \DateTime('2019-11-25'))>
+        endDate: <(new \DateTime('2019-12-25'))>
+        totalAmount: 100
+        currency: EUR
+        status: Commit
+        requests: I need an assistance helping me
+        comments: A comment can be anything i want to say
+        processed: true
+    booking2:
+        identifier: RESA-0009564496
+        partner: '@partner1'
+        createdAt: <(new \DateTime('-1 day'))>
+        updatedAt: <(new \DateTime('-1 day'))>
+        startDate: <(new \DateTime('+20 day'))>
+        endDate: <(new \DateTime('+22 day'))>
+        totalAmount: 300
+        currency: EUR
+        status: Commit
+        requests: Booking 2 I need an assistance helping me
+        comments: Booking 2 A comment can be anything i want to say
+        processed: true
+    booking3:
+        identifier: RESA-0009564497
+        partner: '@partner2'
+        createdAt: <(new \DateTime('2019-03-15'))>
+        updatedAt: <(new \DateTime('2019-03-19'))>
+        startDate: <(new \DateTime('2019-03-25'))>
+        endDate: <(new \DateTime('2019-04-15'))>
+        totalAmount: 50
+        currency: EUR
+        status: Commit
+        requests: I need an assistance helping me
+        comments: A comment can be anything i want to say
+        voucherNumber: 12345678
+        processed: true
+    booking4:
+        identifier: RESA-0009564498
+        partner: '@partner2'
+        createdAt: <(new \DateTime('2019-03-17'))>
+        updatedAt: <(new \DateTime('2019-03-22'))>
+        startDate: <(new \DateTime('2019-04-15'))>
+        endDate: <(new \DateTime('2019-05-15'))>
+        totalAmount: 800
+        currency: EUR
+        status: Commit
+        requests: I need an assistance helping me
+        comments: A comment can be anything i want to say
+        voucherNumber: 654321
+        processed: true
+    booking5:
+        identifier: RESA-0009564499
+        partner: '@partner3'
+        createdAt: <(new \DateTime('-1 day'))>
+        updatedAt: <(new \DateTime('-1 day'))>
+        startDate: <(new \DateTime('+20 day'))>
+        endDate: <(new \DateTime('+22 day'))>
+        totalAmount: 100
+        currency: EUR
+        status: Commit
+        requests: I need an assistance helping me
+        comments: A comment can be anything i want to say
+        processed: true
+    booking6:
+        identifier: RESA-0009564500
+        partner: '@partner3'
+        createdAt: <(new \DateTime('-1 day'))>
+        updatedAt: <(new \DateTime('-1 day'))>
+        startDate: <(new \DateTime('+20 day'))>
+        endDate: <(new \DateTime('+22 day'))>
+        totalAmount: 2000
+        currency: EUR
+        status: Commit
+        requests: I need an assistance helping me
+        comments: A comment can be anything i want to say
+        processed: true
+    booking7:
+        identifier: RESA-0009564501
+        partner: '@partner4'
+        createdAt: <(new \DateTime('-1 day'))>
+        updatedAt: <(new \DateTime('-1 day'))>
+        startDate: <(new \DateTime('+20 day'))>
+        endDate: <(new \DateTime('+22 day'))>
+        totalAmount: 60
+        currency: EUR
+        status: Commit
+        requests: I need an assistance helping me
+        comments: A comment can be anything i want to say
+        processed: true
+    booking8:
+        identifier: RESA-0009564502
+        partner: '@partner4'
+        createdAt: <(new \DateTime('-1 day'))>
+        updatedAt: <(new \DateTime('-1 day'))>
+        startDate: <(new \DateTime('+20 day'))>
+        endDate: <(new \DateTime('+22 day'))>
+        totalAmount: 1200
+        currency: EUR
+        status: Commit
+        requests: I need an assistance helping me
+        comments: A comment can be anything i want to say
+        processed: true
+    booking9:
+        identifier: RESA-0009564503
+        partner: '@partner5'
+        createdAt: <(new \DateTime('-1 day'))>
+        updatedAt: <(new \DateTime('-1 day'))>
+        startDate: <(new \DateTime('+20 day'))>
+        endDate: <(new \DateTime('+22 day'))>
+        totalAmount: 70
+        currency: EUR
+        status: Commit
+        requests: I need an assistance helping me
+        comments: A comment can be anything i want to say
+        processed: true
+    booking10:
+        identifier: RESA-0009564504
+        partner: '@partner5'
+        createdAt: <(new \DateTime('-1 day'))>
+        updatedAt: <(new \DateTime('-1 day'))>
+        startDate: <(new \DateTime('+20 day'))>
+        endDate: <(new \DateTime('+22 day'))>
+        totalAmount: 200
+        currency: EUR
+        status: Commit
+        requests: I need an assistance helping me
+        comments: A comment can be anything i want to say
+        processed: true
+    booking11:
+        identifier: RESA-0009564505
+        partner: '@partner6'
+        createdAt: <(new \DateTime('-1 day'))>
+        updatedAt: <(new \DateTime('-1 day'))>
+        startDate: <(new \DateTime('+20 day'))>
+        endDate: <(new \DateTime('+22 day'))>
+        totalAmount: 60
+        currency: EUR
+        status: Commit
+        requests: I need an assistance helping me
+        comments: A comment can be anything i want to say
+        processed: true
+    booking12:
+        identifier: RESA-0009564506
+        partner: '@partner6'
+        createdAt: <(new \DateTime('-1 day'))>
+        updatedAt: <(new \DateTime('-1 day'))>
+        startDate: <(new \DateTime('+20 day'))>
+        endDate: <(new \DateTime('+22 day'))>
+        totalAmount: 120
+        currency: EUR
+        status: Commit
+        requests: I need an assistance helping me
+        comments: A comment can be anything i want to say
+        processed: true
+    booking13:
+        identifier: RESA-0009564507
+        partner: '@partner7'
+        createdAt: <(new \DateTime('-1 day'))>
+        updatedAt: <(new \DateTime('-1 day'))>
+        startDate: <(new \DateTime('+20 day'))>
+        endDate: <(new \DateTime('+22 day'))>
+        totalAmount: 70
+        currency: EUR
+        status: Commit
+        requests: I need an assistance helping me
+        comments: A comment can be anything i want to say
+        processed: true
+    booking14:
+        identifier: RESA-0009564508
+        partner: '@partner7'
+        createdAt: <(new \DateTime('-1 day'))>
+        updatedAt: <(new \DateTime('-1 day'))>
+        startDate: <(new \DateTime('+20 day'))>
+        endDate: <(new \DateTime('+22 day'))>
+        totalAmount: 200
+        currency: EUR
+        status: Commit
+        requests: I need an assistance helping me
+        comments: A comment can be anything i want to say
+        processed: true
+    booking15:
+        identifier: RESA-0009564509
+        partner: '@partner8'
+        createdAt: <(new \DateTime('-1 day'))>
+        updatedAt: <(new \DateTime('-1 day'))>
+        startDate: <(new \DateTime('+20 day'))>
+        endDate: <(new \DateTime('+22 day'))>
+        totalAmount: 70
+        currency: EUR
+        status: Commit
+        requests: I need an assistance helping me
+        comments: A comment can be anything i want to say
+        processed: true
+    booking16:
+        identifier: RESA-0009564510
+        partner: '@partner8'
+        createdAt: <(new \DateTime('-1 day'))>
+        updatedAt: <(new \DateTime('-1 day'))>
+        startDate: <(new \DateTime('+20 day'))>
+        endDate: <(new \DateTime('+22 day'))>
+        totalAmount: 200
+        currency: EUR
+        status: Commit
+        requests: I need an assistance helping me
+        comments: A comment can be anything i want to say
+        processed: true
+    booking17:
+        identifier: RESA-0009564511
+        partner: '@partner9'
+        createdAt: <(new \DateTime('-1 day'))>
+        updatedAt: <(new \DateTime('-1 day'))>
+        startDate: <(new \DateTime('+20 day'))>
+        endDate: <(new \DateTime('+22 day'))>
+        totalAmount: 70
+        currency: EUR
+        status: Commit
+        requests: I need an assistance helping me
+        comments: A comment can be anything i want to say
+        processed: true
+    booking18:
+        identifier: RESA-0009564512
+        partner: '@partner9'
+        createdAt: <(new \DateTime('-1 day'))>
+        updatedAt: <(new \DateTime('-1 day'))>
+        startDate: <(new \DateTime('+20 day'))>
+        endDate: <(new \DateTime('+22 day'))>
+        totalAmount: 200
+        currency: EUR
+        status: Commit
+        requests: I need an assistance helping me
+        comments: A comment can be anything i want to say
+        processed: true
+    booking19:
+        identifier: RESA-0009921439
+        partner: '@partner10'
+        createdAt: <(new \DateTime('2019-03-15'))>
+        updatedAt: <(new \DateTime('2019-03-16'))>
+        startDate: <(new \DateTime('2019-03-20'))>
+        endDate: <(new \DateTime('2019-05-15'))>
+        totalAmount: 70
+        currency: EUR
+        status: Commit
+        requests: I need an assistance helping me
+        comments: A comment can be anything i want to say
+        processed: true
+    booking20:
+        identifier: RESA-0009921440
+        partner: '@partner10'
+        createdAt: <(new \DateTime('2019-03-15'))>
+        updatedAt: <(new \DateTime('2019-03-16'))>
+        startDate: <(new \DateTime('2019-03-25'))>
+        endDate: <(new \DateTime('2019-04-15'))>
+        totalAmount: 200
+        currency: EUR
+        status: Commit
+        requests: I need an assistance helping me
+        comments: A comment can be anything i want to say
+        processed: true

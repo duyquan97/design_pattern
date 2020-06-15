@@ -1,0 +1,61 @@
+App\Entity\CmUser:
+    cmuser1:
+        username: 'availpro'
+#        password is 'password'
+        password: '\$2y\$13\$BMl.Pym5tOVwwKo2ZyF2N.YulMycdddK1UGNpwV0V48R.sLsWbqK6'
+        channelManager: '@availpro'
+    cmuser2:
+        username: 'reservithotel'
+        #        password is 'password'
+        password: '\$2y\$13\$BMl.Pym5tOVwwKo2ZyF2N.YulMycdddK1UGNpwV0V48R.sLsWbqK6'
+        channelManager: '@reservithotel'
+    cmuser3:
+        username: 'siteminder'
+        #        password is 'password'
+        password: '\$2y\$13\$BMl.Pym5tOVwwKo2ZyF2N.YulMycdddK1UGNpwV0V48R.sLsWbqK6'
+        channelManager: '@siteminder'
+    cmuser4:
+        username: 'ratetiger'
+        #        password is 'password'
+        password: '\$2y\$13\$BMl.Pym5tOVwwKo2ZyF2N.YulMycdddK1UGNpwV0V48R.sLsWbqK6'
+        channelManager: '@ratetiger'
+    cmuser5:
+        username: 'bookingexpert'
+        #        password is 'password'
+        password: '\$2y\$13\$BMl.Pym5tOVwwKo2ZyF2N.YulMycdddK1UGNpwV0V48R.sLsWbqK6'
+        channelManager: '@bookingexpert'
+    cmuser6:
+        username: 'elloha'
+        #        password is 'password'
+        password: '\$2y\$13\$BMl.Pym5tOVwwKo2ZyF2N.YulMycdddK1UGNpwV0V48R.sLsWbqK6'
+        channelManager: '@elloha'
+    cmuser7:
+        username: 'ericsoft'
+        #        password is 'password'
+        password: '\$2y\$13\$BMl.Pym5tOVwwKo2ZyF2N.YulMycdddK1UGNpwV0V48R.sLsWbqK6'
+        channelManager: '@ericsoft'
+    cmuser8:
+        username: 'yieldplanet'
+        #        password is 'password'
+        password: '\$2y\$13\$BMl.Pym5tOVwwKo2ZyF2N.YulMycdddK1UGNpwV0V48R.sLsWbqK6'
+        channelManager: '@yieldplanet'
+    cmuser9:
+        username: 'wubook'
+        #        password is 'password'
+        password: '\$2y\$13\$BMl.Pym5tOVwwKo2ZyF2N.YulMycdddK1UGNpwV0V48R.sLsWbqK6'
+        channelManager: '@wubook'
+    cmuser10:
+        username: 'travelclick'
+        #        password is 'password'
+        password: '\$2y\$13\$BMl.Pym5tOVwwKo2ZyF2N.YulMycdddK1UGNpwV0V48R.sLsWbqK6'
+        channelManager: '@travelclick'
+    cmuser11:
+        username: 'smarthotel'
+        #        password is 'password'
+        password: '\$2y\$13\$BMl.Pym5tOVwwKo2ZyF2N.YulMycdddK1UGNpwV0V48R.sLsWbqK6'
+        channelManager: '@smarthotel'
+    cmuser12:
+        username: 'bb8'
+        #        password is 'w25atrJV9uGugu6e6by6yJdx5rvzJZVJF9z5nTAZ'
+        password: '\$2a\$10\$PcAMrSsmH.ojcIBNtq9q0OZzS.xjmhON/.AOAiV87b.c4WUB05NB6'
+        channelManager: '@smartboxbb8'

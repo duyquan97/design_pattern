@@ -1,0 +1,172 @@
+App\Entity\Availability:
+    availability1:
+        product: '@product1'
+        partner: '@partner1'
+        date: <(new \DateTime('-1 day'))>
+        stock: 100
+        createdAt: <(new \DateTime('now'))>
+        updatedAt: <(new \DateTime('now'))>
+    availability2:
+        product: '@product2'
+        partner: '@partner2'
+        date: <(new \DateTime('-1 day'))>
+        stock: 20
+        createdAt: <(new \DateTime('now'))>
+        updatedAt: <(new \DateTime('now'))>
+    availability3:
+        product: '@product23'
+        partner: '@partner12'
+        date: <(new \DateTime('-1 day'))>
+        stock: 1
+        createdAt: <(new \DateTime('now'))>
+        updatedAt: <(new \DateTime('now'))>
+    availability4:
+        product: '@product24'
+        partner: '@partner12'
+        date: <(new \DateTime('-1 day'))>
+        stock: 20
+        createdAt: <(new \DateTime('now'))>
+        updatedAt: <(new \DateTime('now'))>
+    availability5:
+        product: '@product2'
+        partner: '@partner1'
+        stopSale:  true
+        date: <(new \DateTime('2017-01-01'))>
+        stock: 5
+        createdAt: <(new \DateTime('now'))>
+        updatedAt: <(new \DateTime('now'))>
+
+    smarthotel1:
+        product: '@product21'
+        partner: '@partner11'
+        date: <(new \DateTime('2019-03-15'))>
+        stock: 20
+        stopSale:  false
+        createdAt: <(new \DateTime('now'))>
+        updatedAt: <(new \DateTime('now'))>
+
+    smarthotel2:
+        product: '@product21'
+        partner: '@partner11'
+        date: <(new \DateTime('2019-03-16'))>
+        stock: 20
+        stopSale:  false
+        createdAt: <(new \DateTime('now'))>
+        updatedAt: <(new \DateTime('now'))>
+
+    smarthotel3:
+        product: '@product21'
+        partner: '@partner11'
+        date: <(new \DateTime('2019-03-17'))>
+        stock: 20
+        stopSale:  false
+        createdAt: <(new \DateTime('now'))>
+        updatedAt: <(new \DateTime('now'))>
+
+    smarthotel4:
+        product: '@product21'
+        partner: '@partner11'
+        date: <(new \DateTime('2019-03-18'))>
+        stock: 20
+        stopSale:  false
+        createdAt: <(new \DateTime('now'))>
+        updatedAt: <(new \DateTime('now'))>
+
+    smarthotel5:
+        product: '@product21'
+        partner: '@partner11'
+        date: <(new \DateTime('2019-03-19'))>
+        stock: 20
+        stopSale:  false
+        createdAt: <(new \DateTime('now'))>
+        updatedAt: <(new \DateTime('now'))>
+
+    smarthotel6:
+        product: '@product21'
+        partner: '@partner11'
+        date: <(new \DateTime('2019-03-20'))>
+        stock: 20
+        stopSale:  false
+        createdAt: <(new \DateTime('now'))>
+        updatedAt: <(new \DateTime('now'))>
+
+    travelclick1:
+        product: '@product19'
+        partner: '@partner10'
+        date: <(new \DateTime('2019-03-15'))>
+        stock: 20
+        stopSale:  false
+        createdAt: <(new \DateTime('now'))>
+        updatedAt: <(new \DateTime('now'))>
+
+    travelclick2:
+        product: '@product19'
+        partner: '@partner10'
+        date: <(new \DateTime('2019-03-16'))>
+        stock: 20
+        stopSale:  true
+        createdAt: <(new \DateTime('now'))>
+        updatedAt: <(new \DateTime('now'))>
+
+    travelclick3:
+        product: '@product19'
+        partner: '@partner10'
+        date: <(new \DateTime('2019-03-17'))>
+        stock: 20
+        stopSale:  false
+        createdAt: <(new \DateTime('now'))>
+        updatedAt: <(new \DateTime('now'))>
+
+    travelclick4:
+        product: '@product20'
+        partner: '@partner10'
+        date: <(new \DateTime('2019-03-15'))>
+        stock: 20
+        stopSale:  true
+        createdAt: <(new \DateTime('now'))>
+        updatedAt: <(new \DateTime('now'))>
+
+    travelclick5:
+        product: '@product20'
+        partner: '@partner10'
+        date: <(new \DateTime('2019-03-16'))>
+        stock: 20
+        stopSale:  true
+        createdAt: <(new \DateTime('now'))>
+        updatedAt: <(new \DateTime('now'))>
+
+    travelclick6:
+        product: '@product20'
+        partner: '@partner10'
+        date: <(new \DateTime('2019-03-17'))>
+        stock: 20
+        stopSale:  false
+        createdAt: <(new \DateTime('now'))>
+        updatedAt: <(new \DateTime('now'))>
+
+    wubook1:
+        product: '@product17'
+        partner: '@partner9'
+        date: <(new \DateTime('2019-03-15'))>
+        stock: 20
+        stopSale:  true
+        createdAt: <(new \DateTime('now'))>
+        updatedAt: <(new \DateTime('now'))>
+
+    wubook2:
+        product: '@product17'
+        partner: '@partner9'
+        date: <(new \DateTime('2019-03-16'))>
+        stock: 20
+        stopSale:  true
+        createdAt: <(new \DateTime('now'))>
+        updatedAt: <(new \DateTime('now'))>
+
+    wubook3:
+        product: '@product17'
+        partner: '@partner9'
+        date: <(new \DateTime('2019-03-17'))>
+        stock: 20
+        stopSale:  false
+        createdAt: <(new \DateTime('now'))>
+        updatedAt: <(new \DateTime('now'))>

@@ -1,0 +1,14 @@
+api_cm_xml_availpro_get_hotel:
+    path: /api/ext/xml/availpro/v1/GetHotel
+    defaults: { _controller: App\Controller\AvailProController::getHotelAction }
+    methods:  [GET]
+
+api_cm_xml_availpro_get_availabilities_and_rates:
+    path: /api/ext/xml/availpro/v1/UpdateAvailabilitiesAndRates
+    defaults: { _controller: App\Controller\AvailProController::updateAvailabilitiesAndRatesAction }
+    methods:  [POST]
+
+api_cm_xml_availpro_get_bookings:
+    path: /api/ext/xml/availpro/v1/GetBookings
+    defaults: { _controller: App\Controller\AvailProController::getBookingsAction }
+    methods:  [GET]

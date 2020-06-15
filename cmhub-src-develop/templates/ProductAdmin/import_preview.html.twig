@@ -1,0 +1,114 @@
+{% extends '@SonataAdmin/standard_layout.html.twig' %}
+
+{% block title %}
+    Preview chaining file
+{% endblock %}
+
+{% block sonata_breadcrumb %}
+    <div class="navbar-left">
+        <div class="hidden-xs">
+            <ol class="nav navbar-top-links breadcrumb">
+                <li>
+                    <a href="{{ path('sonata_admin_dashboard') }}">
+                        <i class="fa fa-home"></i>
+                    </a>
+                </li>
+                <li class="active"><span>Import room data</span></li>
+            </ol>
+        </div>
+    </div>
+{% endblock %}
+
+{% block sonata_admin_content %}
+    <section class="content-header">
+        <div class="sticky-wrapper">
+            <nav class="navbar navbar-default" role="navigation" style="width: auto;">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="#">Preview chaining file</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="sonata-ba-form">
+            <form role="form" method="POST" action="">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="box box-primary">
+                            <div class="box-body table-responsive no-padding">
+                                <table class="table table-bordered table-striped table-hover sonata-ba-list">
+                                    <thead>
+                                    <tr class="sonata-ba-list-field-header">
+                                        <th class="sonata-ba-list-field-header-integer">Row</th>
+                                        <th class="sonata-ba-list-field-header-integer">Partner URN</th>
+                                        <th class="sonata-ba-list-field-header-integer">Room Component</th>
+                                        <th class="sonata-ba-list-field-header-integer">Master Room Component</th>
+                                        <th class="sonata-ba-list-field-header-integer">Component Name</th>
+                                        <th class="sonata-ba-list-field-header-integer">Result</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for row in rows %}
+                                        {% if row.hasException() %}
+                                        <tr>
+                                            <td class="sonata-ba-list-field sonata-ba-list-field-text">
+                                                <span>{{ loop.index }}</span>
+                                            </td>
+                                            <td class="sonata-ba-list-field sonata-ba-list-field-text">
+                                                <span>
+                                                    {% if row.partner %}
+                                                        <b>{{ row.partner.name }}</b> ({{ row.partner.identifier }})
+                                                    {% endif %}
+                                                </span>
+                                            </td>
+                                            <td class="sonata-ba-list-field sonata-ba-list-field-text">
+                                                <span>
+                                                    {% if row.product %}
+                                                        {{ row.product.identifier }}
+                                                    {% endif %}
+                                                </span>
+                                            </td>
+                                            <td class="sonata-ba-list-field sonata-ba-list-field-text">
+                                                {% if row.product and row.product.masterProduct %}
+                                                    {{ row.product.masterProduct.identifier }}
+                                                {% endif %}
+                                            </td>
+                                            <td class="sonata-ba-list-field sonata-ba-list-field-text">
+                                                {% if row.product %}
+                                                    {{ row.product.name }}
+                                                {% endif %}
+                                            </td>
+                                            <td class="sonata-ba-list-field sonata-ba-list-field-boolean">
+                                                {% if row.exception %}
+                                                    <span class="label label-danger">{{ row.exception.getMessage }}</span>
+                                                {% else %}
+                                                    <span class="label label-success">Correct</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sonata-ba-form-actions well well-small form-actions">
+                    <a class="btn btn-success" href="{{ path('import_data_importData', {'id' : id}) }}">
+                        <i class="fa fa-save" aria-hidden="true"></i> Continue
+                    </a>
+                    or
+                    <a class="btn btn-danger" href="{{ path('import_data_delete', {'id': id}) }}">
+                        <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                        Delete
+                    </a>
+                </div>
+            </form>
+        </div>
+    </section>
+{% endblock %}

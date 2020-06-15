@@ -1,0 +1,6 @@
+{% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}
+
+{% block field %}
+    {% set status = object.status == 'partner' ? 'success' : 'danger' %}
+        <span class="label label-{{ status }}">{{ object.status ? object.status : 'empty' }}</span>
+{% endblock %}

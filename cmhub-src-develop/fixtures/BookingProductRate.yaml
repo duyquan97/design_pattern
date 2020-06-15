@@ -1,0 +1,201 @@
+App\Entity\BookingProductRate:
+    bookingProductRate1:
+        amount: 50
+        currency: EUR
+        date: <(new \DateTime('+20 day'))>
+        bookingProduct: '@bookingProduct1'
+    bookingProductRate2:
+        amount: 50
+        currency: EUR
+        date: <(new \DateTime('+21 day'))>
+        bookingProduct: '@bookingProduct1'
+    bookingProductRate3:
+        amount: 150
+        currency: EUR
+        date: <(new \DateTime('+20 day'))>
+        bookingProduct: '@bookingProduct2'
+    bookingProductRate4:
+        amount: 150
+        currency: EUR
+        date: <(new \DateTime('+21 day'))>
+        bookingProduct: '@bookingProduct2'
+    bookingProductRate5:
+        amount: 25
+        currency: EUR
+        date: <(new \DateTime('+20 day'))>
+        bookingProduct: '@bookingProduct3'
+    bookingProductRate6:
+        amount: 25
+        currency: EUR
+        date: <(new \DateTime('+21 day'))>
+        bookingProduct: '@bookingProduct3'
+    bookingProductRate7:
+        amount: 400
+        currency: EUR
+        date: <(new \DateTime('+20 day'))>
+        bookingProduct: '@bookingProduct4'
+    bookingProductRate8:
+        amount: 400
+        currency: EUR
+        date: <(new \DateTime('+21 day'))>
+        bookingProduct: '@bookingProduct4'
+    bookingProductRate9:
+        amount: 50
+        currency: EUR
+        date: <(new \DateTime('+20 day'))>
+        bookingProduct: '@bookingProduct5'
+    bookingProductRate10:
+        amount: 50
+        currency: EUR
+        date: <(new \DateTime('+21 day'))>
+        bookingProduct: '@bookingProduct5'
+    bookingProductRate11:
+        amount: 1000
+        currency: EUR
+        date: <(new \DateTime('+20 day'))>
+        bookingProduct: '@bookingProduct6'
+    bookingProductRate12:
+        amount: 1000
+        currency: EUR
+        date: <(new \DateTime('+21 day'))>
+        bookingProduct: '@bookingProduct6'
+    bookingProductRate13:
+        amount: 30
+        currency: EUR
+        date: <(new \DateTime('+20 day'))>
+        bookingProduct: '@bookingProduct7'
+    bookingProductRate14:
+        amount: 30
+        currency: EUR
+        date: <(new \DateTime('+21 day'))>
+        bookingProduct: '@bookingProduct7'
+    bookingProductRate15:
+        amount: 600
+        currency: EUR
+        date: <(new \DateTime('+20 day'))>
+        bookingProduct: '@bookingProduct8'
+    bookingProductRate16:
+        amount: 600
+        currency: EUR
+        date: <(new \DateTime('+21 day'))>
+        bookingProduct: '@bookingProduct8'
+    bookingProductRate17:
+        amount: 35
+        currency: EUR
+        date: <(new \DateTime('+20 day'))>
+        bookingProduct: '@bookingProduct9'
+    bookingProductRate18:
+        amount: 35
+        currency: EUR
+        date: <(new \DateTime('+21 day'))>
+        bookingProduct: '@bookingProduct9'
+    bookingProductRate19:
+        amount: 100
+        currency: EUR
+        date: <(new \DateTime('+20 day'))>
+        bookingProduct: '@bookingProduct10'
+    bookingProductRate20:
+        amount: 100
+        currency: EUR
+        date: <(new \DateTime('+21 day'))>
+        bookingProduct: '@bookingProduct10'
+    bookingProductRate21:
+        amount: 30
+        currency: EUR
+        date: <(new \DateTime('+20 day'))>
+        bookingProduct: '@bookingProduct11'
+    bookingProductRate22:
+        amount: 30
+        currency: EUR
+        date: <(new \DateTime('+21 day'))>
+        bookingProduct: '@bookingProduct11'
+    bookingProductRate23:
+        amount: 60
+        currency: EUR
+        date: <(new \DateTime('+20 day'))>
+        bookingProduct: '@bookingProduct12'
+    bookingProductRate24:
+        amount: 60
+        currency: EUR
+        date: <(new \DateTime('+21 day'))>
+        bookingProduct: '@bookingProduct12'
+    bookingProductRate25:
+        amount: 35
+        currency: EUR
+        date: <(new \DateTime('+20 day'))>
+        bookingProduct: '@bookingProduct13'
+    bookingProductRate26:
+        amount: 35
+        currency: EUR
+        date: <(new \DateTime('+21 day'))>
+        bookingProduct: '@bookingProduct13'
+    bookingProductRate27:
+        amount: 100
+        currency: EUR
+        date: <(new \DateTime('+20 day'))>
+        bookingProduct: '@bookingProduct14'
+    bookingProductRate28:
+        amount: 100
+        currency: EUR
+        date: <(new \DateTime('+21 day'))>
+        bookingProduct: '@bookingProduct14'
+    bookingProductRate29:
+        amount: 35
+        currency: EUR
+        date: <(new \DateTime('+20 day'))>
+        bookingProduct: '@bookingProduct15'
+    bookingProductRate30:
+        amount: 35
+        currency: EUR
+        date: <(new \DateTime('+21 day'))>
+        bookingProduct: '@bookingProduct15'
+    bookingProductRate31:
+        amount: 100
+        currency: EUR
+        date: <(new \DateTime('+20 day'))>
+        bookingProduct: '@bookingProduct16'
+    bookingProductRate32:
+        amount: 100
+        currency: EUR
+        date: <(new \DateTime('+21 day'))>
+        bookingProduct: '@bookingProduct16'
+    bookingProductRate33:
+        amount: 100
+        currency: EUR
+        date: <(new \DateTime('+20 day'))>
+        bookingProduct: '@bookingProduct17'
+    bookingProductRate34:
+        amount: 100
+        currency: EUR
+        date: <(new \DateTime('+21 day'))>
+        bookingProduct: '@bookingProduct17'
+    bookingProductRate35:
+        amount: 100
+        currency: EUR
+        date: <(new \DateTime('+20 day'))>
+        bookingProduct: '@bookingProduct18'
+    bookingProductRate36:
+        amount: 100
+        currency: EUR
+        date: <(new \DateTime('+21 day'))>
+        bookingProduct: '@bookingProduct18'
+    bookingProductRate37:
+        amount: 100
+        currency: EUR
+        date: <(new \DateTime('+20 day'))>
+        bookingProduct: '@bookingProduct19'
+    bookingProductRate38:
+        amount: 100
+        currency: EUR
+        date: <(new \DateTime('+21 day'))>
+        bookingProduct: '@bookingProduct19'
+    bookingProductRate39:
+        amount: 100
+        currency: EUR
+        date: <(new \DateTime('+20 day'))>
+        bookingProduct: '@bookingProduct20'
+    bookingProductRate40:
+        amount: 100
+        currency: EUR
+        date: <(new \DateTime('+21 day'))>
+        bookingProduct: '@bookingProduct20'

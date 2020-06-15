@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://www.opentravel.org/OTA/2003/05"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ota="http://www.opentravel.org/OTA/2003/05"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+                  xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.opentravel.org/OTA/2003/05"
+                  name="OTA_Smartbox">
+    <wsdl:types>
+        <xs:schema>
+            <xs:import namespace="http://www.opentravel.org/OTA/2003/05"
+                       schemaLocation="2016A/OTA_HotelRateAmountNotifRQ.xsd"/>
+            <xs:import namespace="http://www.opentravel.org/OTA/2003/05"
+                       schemaLocation="2016A/OTA_HotelRateAmountNotifRS.xsd"/>
+            <xs:import namespace="http://www.opentravel.org/OTA/2003/05"
+                       schemaLocation="2016A/OTA_HotelInvCountNotifRQ.xsd"/>
+            <xs:import namespace="http://www.opentravel.org/OTA/2003/05"
+                       schemaLocation="2016A/OTA_HotelInvCountNotifRS.xsd"/>
+            <xs:import namespace="http://www.opentravel.org/OTA/2003/05"
+                       schemaLocation="2016A/OTA_HotelDescriptiveInfoRQ.xsd"/>
+            <xs:import namespace="http://www.opentravel.org/OTA/2003/05"
+                       schemaLocation="2016A/OTA_HotelDescriptiveInfoRS.xsd"/>
+            <xs:import namespace="http://www.opentravel.org/OTA/2003/05" schemaLocation="2016A/OTA_PingRQ.xsd"/>
+            <xs:import namespace="http://www.opentravel.org/OTA/2003/05" schemaLocation="2016A/OTA_PingRS.xsd"/>
+            <xs:import namespace="http://www.opentravel.org/OTA/2003/05"
+                       schemaLocation="2016A/OTA_HotelRatePlanRQ.xsd"/>
+            <xs:import namespace="http://www.opentravel.org/OTA/2003/05"
+                       schemaLocation="2016A/OTA_HotelRatePlanRS.xsd"/>
+            <xs:import namespace="http://www.opentravel.org/OTA/2003/05"
+                       schemaLocation="2016A/OTA_HotelBookingRuleNotifRQ.xsd"/>
+            <xs:import namespace="http://www.opentravel.org/OTA/2003/05"
+                       schemaLocation="2016A/OTA_HotelBookingRuleNotifRS.xsd"/>
+        </xs:schema>
+    </wsdl:types>
+
+    <wsdl:message name="OTA_HotelRateAmountNotifRQ">
+        <wsdl:part name="OTA_HotelRateAmountNotifRQ" element="ota:OTA_HotelRateAmountNotifRQ"/>
+    </wsdl:message>
+    <wsdl:message name="OTA_HotelRateAmountNotifRS">
+        <wsdl:part name="OTA_HotelRateAmountNotifRS" element="ota:OTA_HotelRateAmountNotifRS"/>
+    </wsdl:message>
+    <wsdl:message name="OTA_HotelInvCountNotifRQ">
+        <wsdl:part name="OTA_HotelInvCountNotifRQ" element="ota:OTA_HotelInvCountNotifRQ"/>
+    </wsdl:message>
+    <wsdl:message name="OTA_HotelInvCountNotifRS">
+        <wsdl:part name="OTA_HotelInvCountNotifRS" element="ota:OTA_HotelInvCountNotifRS"/>
+    </wsdl:message>
+    <wsdl:message name="OTA_HotelDescriptiveInfoRQ">
+        <wsdl:part name="OTA_HotelDescriptiveInfoRQ" element="ota:OTA_HotelDescriptiveInfoRQ"/>
+    </wsdl:message>
+    <wsdl:message name="OTA_HotelDescriptiveInfoRS">
+        <wsdl:part name="OTA_HotelDescriptiveInfoRS" element="ota:OTA_HotelDescriptiveInfoRS"/>
+    </wsdl:message>
+    <wsdl:message name="OTA_PingRQ">
+        <wsdl:part name="OTA_PingRQ" element="ota:OTA_PingRQ"/>
+    </wsdl:message>
+    <wsdl:message name="OTA_PingRS">
+        <wsdl:part name="OTA_PingRS" element="ota:OTA_PingRS"/>
+    </wsdl:message>
+    <wsdl:message name="OTA_HotelRatePlanRQ">
+        <wsdl:part name="OTA_HotelRatePlanRQ" element="ota:OTA_HotelRatePlanRQ"/>
+    </wsdl:message>
+    <wsdl:message name="OTA_HotelRatePlanRS">
+        <wsdl:part name="OTA_HotelRatePlanRS" element="ota:OTA_HotelRatePlanRS"/>
+    </wsdl:message>
+    <wsdl:message name="OTA_HotelBookingRuleNotifRQ">
+        <wsdl:part name="OTA_HotelBookingRuleNotifRQ" element="ota:OTA_HotelBookingRuleNotifRQ"/>
+    </wsdl:message>
+    <wsdl:message name="OTA_HotelBookingRuleNotifRS">
+        <wsdl:part name="OTA_HotelBookingRuleNotifRS" element="ota:OTA_HotelBookingRuleNotifRS"/>
+    </wsdl:message>
+
+    <wsdl:portType name="OTA_PortType">
+        <wsdl:operation name="OTA_HotelRateAmountNotifRQ">
+            <wsdl:input message="tns:OTA_HotelRateAmountNotifRQ"/>
+            <wsdl:output message="tns:OTA_HotelRateAmountNotifRS"/>
+        </wsdl:operation>
+        <wsdl:operation name="OTA_HotelInvCountNotifRQ">
+            <wsdl:input message="tns:OTA_HotelInvCountNotifRQ"/>
+            <wsdl:output message="tns:OTA_HotelInvCountNotifRS"/>
+        </wsdl:operation>
+        <wsdl:operation name="OTA_HotelDescriptiveInfoRQ">
+            <wsdl:input message="tns:OTA_HotelDescriptiveInfoRQ"/>
+            <wsdl:output message="tns:OTA_HotelDescriptiveInfoRS"/>
+        </wsdl:operation>
+        <wsdl:operation name="OTA_PingRQ">
+            <wsdl:input message="tns:OTA_PingRQ"/>
+            <wsdl:output message="tns:OTA_PingRS"/>
+        </wsdl:operation>
+        <wsdl:operation name="OTA_HotelRatePlanRQ">
+            <wsdl:input message="tns:OTA_HotelRatePlanRQ"/>
+            <wsdl:output message="tns:OTA_HotelRatePlanRS"/>
+        </wsdl:operation>
+        <wsdl:operation name="OTA_HotelBookingRuleNotifRQ">
+            <wsdl:input message="tns:OTA_HotelBookingRuleNotifRQ"/>
+            <wsdl:output message="tns:OTA_HotelBookingRuleNotifRS"/>
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <wsdl:binding name="OTA_Binding" type="tns:OTA_PortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="OTA_HotelRateAmountNotifRQ">
+            <soap:operation soapAction="OTA_HotelRateAmountNotifRQ" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="OTA_HotelInvCountNotifRQ">
+            <soap:operation soapAction="OTA_HotelInvCountNotifRQ" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="OTA_HotelDescriptiveInfoRQ">
+            <soap:operation soapAction="OTA_HotelDescriptiveInfoRQ" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="OTA_PingRQ">
+            <soap:operation soapAction="OTA_PingRQ" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="OTA_HotelRatePlanRQ">
+            <soap:operation soapAction="OTA_HotelRatePlanRQ" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="OTA_HotelBookingRuleNotifRQ">
+            <soap:operation soapAction="OTA_HotelBookingRuleNotifRQ" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <wsdl:service name="OTA">
+        <wsdl:port name="OTA_Port" binding="tns:OTA_Binding">
+            <soap:address location="/api/ext/soap/ota/smarthotel"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
