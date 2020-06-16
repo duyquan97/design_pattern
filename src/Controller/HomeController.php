@@ -3,38 +3,47 @@
 namespace App\Controller;
 
 use App\Entity\Product;
-use App\Form\ProductType;
-use Carbon\Carbon;
-use FOS\RestBundle\Controller\AbstractFOSRestController;
-use FOS\RestBundle\Controller\FOSRestController;
-use FOS\RestBundle\FOSRestBundle;
+use App\Message\SmsNotification;
+use App\Service\HelloService;
 use FOS\RestBundle\View\View;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use FOS\RestBundle\Controller\Annotations as Rest;
 
-class HomeController extends AbstractFOSRestController
+
+class HomeController  extends AbstractController
 {
 
     /**
-     * Creates an Article resource
-     * @Rest\Get("/api/home")
-     * @return View
+     * @Rest\Route("/message", methods={"GET"})
+     * @param MessageBusInterface $bus
      */
-    public function index(Request $request):View
+    public function index(MessageBusInterface $bus)
     {
+
         $product = new Product();
-        $form=$this->createForm(ProductType::class,$product);
-        $data= json_decode($request->request->all(),true);
-        $form->submit($data);
-        if($form->isSubmitted()&&$form->isValid()){$em=$this->getDoctrine()->getManager();
-        $em->persist($data);
-        $em->flush();
-        return $this->handleView($this->view(['status'=>'ok'],Response::HTTP_CREATED));
-        }
-        return $this->handleView($this->view($form->getErrors()));
-//        return View::create($a, Response::HTTP_CREATED);
+        $product->setName('Quan');
+       $sms = $this->dispatchMessage(new SmsNotification($product));
+        dd($sms);
+    }
+
+    /**
+     * @Route("/soap")
+     */
+    public function soap(HelloService $helloService)
+    {
+        $soapServer = new \SoapServer('wsdl.wsdl');
+        $soapServer->setObject($helloService);
+        $response = new Response();
+        $response->headers->set('Content-Type', 'text/xml; charset=ISO-8859-1');
+
+        ob_start();
+        $soapServer->handle();
+        $response->setContent(ob_get_clean());
+
+        return $response;
     }
 }
